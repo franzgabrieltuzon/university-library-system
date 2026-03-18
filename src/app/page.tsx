@@ -85,12 +85,26 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-background cyber-grid relative overflow-hidden">
+      {/* Background Campus Image with Overlay */}
+      {campusImage && (
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src={campusImage} 
+            alt="NEU Campus" 
+            fill 
+            className="object-cover opacity-30 grayscale"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
+        </div>
+      )}
+
       {/* Background Glow */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/20 rounded-full blur-[120px] pointer-events-none z-0" />
 
       {/* Left Side: Branding */}
-      <div className="flex-1 hidden md:flex flex-col justify-center items-center p-12 relative">
+      <div className="flex-1 hidden md:flex flex-col justify-center items-center p-12 relative z-10">
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -106,7 +120,7 @@ export default function LoginPage() {
           )}
           
           <h1 className="text-5xl font-headline font-bold mb-6 text-white tracking-tighter">
-            THE DIGITAL <br/><span className="text-primary">ARCHIVE</span>
+            New Era University <br/><span className="text-primary">Library</span>
           </h1>
           
           <div className="glass-card p-8 rounded-3xl border-white/5 relative overflow-hidden group">
@@ -148,7 +162,7 @@ export default function LoginPage() {
             </TabsList>
 
             <AnimatePresence mode="wait">
-              <TabsContent value="rfid">
+              <TabsContent value="rfid" key="rfid">
                 <Card className="glass-card border-none overflow-hidden">
                   <CardHeader className="text-center pb-2">
                     <CardTitle className="text-xl">Smart Access</CardTitle>
@@ -188,7 +202,7 @@ export default function LoginPage() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="email">
+              <TabsContent value="email" key="email">
                 <Card className="glass-card border-none">
                   <CardHeader className="text-center pb-2">
                     <CardTitle className="text-xl">Legacy Access</CardTitle>
