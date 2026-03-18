@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -13,7 +12,7 @@ import { authStore } from '@/lib/auth-store';
 import { getBlockedUsers } from '@/lib/mock-db';
 import { Mail, Loader2, Scan } from 'lucide-react';
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { PlaceHolderImages } from '@/app/lib/placeholder-images';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function LoginPage() {
@@ -37,7 +36,7 @@ export default function LoginPage() {
     if (!rfidCode) return;
     setIsScanning(true);
     setTimeout(() => {
-      authenticate('rfid.user@neu.edu.ph');
+      authenticate('visitor@neu.edu.ph');
       setIsScanning(false);
     }, 1500);
   };
@@ -74,9 +73,9 @@ export default function LoginPage() {
       const mockUser = {
         id: Math.random().toString(),
         email: trimmedEmail,
-        name: trimmedEmail === 'rfid.user@neu.edu.ph' ? 'RFID User' : trimmedEmail.split('@')[0].split('.').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' '),
-        program: role === 'admin' ? 'Administrative Services' : 'Information Technology',
-        college: 'University Administration',
+        name: trimmedEmail === 'jcesperanza@neu.edu.ph' ? 'JC Esperanza' : trimmedEmail.split('@')[0].split('.').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' '),
+        program: role === 'admin' ? 'Administrative Services' : 'Academic Program',
+        college: 'New Era University',
         role: role,
         isEmployee: role === 'admin'
       };
@@ -99,6 +98,7 @@ export default function LoginPage() {
             fill 
             className="object-cover"
             priority
+            unoptimized
           />
           <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px]" />
         </div>
@@ -108,7 +108,14 @@ export default function LoginPage() {
         <div className="flex flex-col items-center mb-8 text-center text-white drop-shadow-lg">
           {logo && (
             <div className="relative w-24 h-24 mb-4">
-              <Image src={logo} alt="NEU Logo" fill className="object-contain" priority />
+              <Image 
+                src={logo} 
+                alt="NEU Logo" 
+                fill 
+                className="object-contain" 
+                priority 
+                unoptimized
+              />
             </div>
           )}
           <h1 className="text-3xl font-headline font-bold tracking-tight">

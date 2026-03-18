@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { authStore, User } from '@/lib/auth-store';
 import { Button } from '@/components/ui/button';
-import { LogOut, LayoutDashboard, History, Users, Settings, Bell, ChevronRight } from 'lucide-react';
+import { LogOut, LayoutDashboard, History, Users, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { PlaceHolderImages } from '@/app/lib/placeholder-images';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -38,7 +38,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           <Link href={user?.role === 'admin' ? '/admin' : '/visitor/welcome'} className="flex items-center gap-3">
             {logo && (
               <div className="relative w-8 h-8">
-                <Image src={logo} alt="NEU Logo" fill className="object-contain" />
+                <Image src={logo} alt="NEU Logo" fill className="object-contain" unoptimized />
               </div>
             )}
             <div className="flex flex-col">
