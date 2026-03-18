@@ -2,25 +2,25 @@
 
 A professional, sleek, and high-performance Library Visitor Log and Analytics System designed specifically for **New Era University**. This application provides a modern digital alternative to traditional logbooks, featuring role-based access, RFID validation simulation, and AI-powered usage insights.
 
-## 🚀 Key Features
+## Key Features
 
-### 🏛️ Institutional Branding
+### Institutional Branding
 - **Custom UI:** Clean, professional "Academic Blue" theme with a high-impact campus backdrop.
 - **Institutional Alignment:** Features the NEU mission and values integrated into the user experience.
 
-### 👤 Visitor Experience
+### Visitor Experience
 - **Sleek Sign-In:** Options for institutional email login or futuristic RFID card validation.
 - **Personalized Greeting:** Validated users are greeted with "Welcome to NEU Library!".
 - **Digital Check-in:** Quick process to log visit reasons (Research, Study, etc.) with support for custom entries.
 
-### 🛡️ Administrative Control
+### Administrative Control
 - **Secure Dashboard:** Exclusive access for administrators (e.g., `jcesperanza@neu.edu.ph`).
 - **Live Analytics:** Real-time charts showing visitor trends and peak usage times.
 - **AI Insights:** Automated categorization and summary of visit reasons using Genkit AI.
 - **Access Control:** Ability to block/unblock specific institutional emails for security.
 - **Exportable Logs:** Professional visitor logs with print and PDF export capabilities.
 
-## 🛠️ Technical Stack
+## Technical Stack
 - **Framework:** Next.js 15 (App Router)
 - **Styling:** Tailwind CSS & ShadCN UI
 - **AI Engine:** Google Genkit with Gemini 2.5 Flash
@@ -28,24 +28,7 @@ A professional, sleek, and high-performance Library Visitor Log and Analytics Sy
 - **Icons:** Lucide React
 - **Animations:** Framer Motion
 
-## 📦 Installation & Setup
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/neu-library-system.git
-   ```
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-3. **Environment Variables:**
-   Create a `.env` file and add your `GEMINI_API_KEY` for AI features.
-4. **Run Development Server:**
-   ```bash
-   npm run dev
-   ```
-
-## 🌐 Deployment to Live Environment
+## Deployment to Live Environment
 
 To generate the live link for submission, follow these steps:
 
@@ -56,10 +39,12 @@ To generate the live link for submission, follow these steps:
 5. Firebase will automatically build and deploy your Next.js application.
 6. Once finished, you will receive a public URL (e.g., `https://neu-library-xxxx.web.app`).
 
-## 🔑 Administrative Access
+## Administrative Access
 To access the Admin Dashboard:
 - **Email:** `jcesperanza@neu.edu.ph`
 - **Password:** Any (Simulation mode)
 
 ---
 *Developed for New Era University - Institutional Data Management Project*
+
+

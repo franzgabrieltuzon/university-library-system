@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -6,7 +7,7 @@ import MainLayout from '@/components/layout/MainLayout';
 import { authStore, User } from '@/lib/auth-store';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, ArrowRight, UserCircle, BookOpen, GraduationCap, Building2 } from 'lucide-react';
+import { CheckCircle2, ArrowRight, UserCircle, BookOpen, GraduationCap, Building2, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function WelcomePage() {
@@ -32,20 +33,28 @@ export default function WelcomePage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-4 py-8"
         >
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-2">
-            <CheckCircle2 className="w-10 h-10 text-primary" />
+          <div className="relative inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary/10 mb-2">
+            <CheckCircle2 className="w-12 h-12 text-primary" />
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
+              className="absolute inset-0 border-2 border-dashed border-primary/20 rounded-full"
+            />
           </div>
-          <h1 className="text-5xl font-headline font-bold text-primary">
-            Welcome to NEU Library!
+          <h1 className="text-5xl font-headline font-bold text-primary flex flex-col items-center gap-2">
+            <span className="flex items-center gap-2">
+              <Sparkles className="w-8 h-8 text-accent animate-pulse" />
+              Welcome to NEU Library!
+            </span>
           </h1>
           <p className="text-xl text-slate-500 max-w-2xl mx-auto font-medium">
-            Your institutional access has been validated successfully.
+            Your institutional access as a <span className="text-primary font-bold uppercase tracking-wider">{user.role}</span> has been validated.
           </p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* User Profile Card */}
-          <Card className="shadow-sm border-slate-200 overflow-hidden">
+          <Card className="shadow-sm border-slate-200 overflow-hidden bg-white">
             <CardHeader className="border-b bg-slate-50/50">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-white text-2xl font-bold shadow-md">
@@ -83,7 +92,7 @@ export default function WelcomePage() {
                 <div>
                   <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tighter">Account Status</p>
                   <span className="font-semibold text-primary uppercase tracking-wider text-xs">
-                    Verified {user.role}
+                    {user.isEmployee ? 'Verified Staff' : 'Verified Student'}
                   </span>
                 </div>
               </div>
@@ -93,7 +102,7 @@ export default function WelcomePage() {
           {/* Quick Actions */}
           <div className="space-y-6">
             <Button 
-              className="w-full h-32 text-xl font-bold flex flex-col items-start p-8 group relative overflow-hidden transition-all hover:shadow-xl active:scale-95"
+              className="w-full h-32 text-xl font-bold flex flex-col items-start p-8 group relative overflow-hidden transition-all hover:shadow-xl active:scale-95 bg-primary hover:bg-primary/90"
               onClick={() => router.push('/visitor/check-in')}
             >
               <div className="flex items-center justify-between w-full mb-2">

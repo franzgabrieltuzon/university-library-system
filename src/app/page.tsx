@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -8,16 +9,18 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { authStore } from '@/lib/auth-store';
+import { authStore, UserRole } from '@/lib/auth-store';
 import { getBlockedUsers } from '@/lib/mock-db';
-import { Mail, Loader2, Scan, ChevronRight } from 'lucide-react';
+import { Mail, Loader2, Scan, ChevronRight, UserCircle, ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/app/lib/placeholder-images';
 import { motion, AnimatePresence } from 'framer-motion';
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [rfidCode, setRfidCode] = useState('');
+  const [selectedRole, setSelectedRole] = useState<UserRole>('visitor');
   const [loading, setLoading] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
   const { toast } = useToast();
@@ -27,7 +30,7 @@ export default function LoginPage() {
 
   const handleEmailLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    authenticate(email);
+    authenticate(email, selectedRole);
   };
 
   const handleRfidLogin = (e: React.FormEvent) => {
@@ -35,12 +38,12 @@ export default function LoginPage() {
     if (!rfidCode) return;
     setIsScanning(true);
     setTimeout(() => {
-      authenticate('visitor@neu.edu.ph');
+      authenticate('visitor@neu.edu.ph', 'visitor');
       setIsScanning(false);
     }, 1500);
   };
 
-  const authenticate = (userEmail: string) => {
+  const authenticate = (userEmail: string, role: UserRole) => {
     setLoading(true);
     const trimmedEmail = userEmail.toLowerCase().trim();
     
@@ -66,9 +69,6 @@ export default function LoginPage() {
         return;
       }
 
-      // Role logic: jcesperanza@neu.edu.ph is Admin, others are Visitors
-      const role = trimmedEmail === 'jcesperanza@neu.edu.ph' ? 'admin' : 'visitor';
-
       const mockUser = {
         id: Math.random().toString(),
         email: trimmedEmail,
@@ -88,23 +88,23 @@ export default function LoginPage() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center p-6 overflow-hidden bg-slate-950">
-      {/* High-End Campus Backdrop */}
+      {/* Campus Backdrop */}
       {campusImage && (
         <div className="fixed inset-0 z-0">
           <Image 
             src={campusImage} 
             alt="NEU Campus" 
             fill 
-            className="object-cover opacity-60 scale-105"
+            className="object-cover opacity-50 scale-105"
             priority
             unoptimized
           />
-          <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-900/60 to-slate-950/20" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-950/80 to-slate-950/40" />
         </div>
       )}
 
       <div className="relative z-10 w-full max-w-4xl grid lg:grid-cols-2 gap-12 items-center">
-        {/* Left Side: Branding & Tagline */}
+        {/* Branding & Tagline */}
         <div className="flex flex-col text-white space-y-8">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
@@ -128,13 +128,10 @@ export default function LoginPage() {
               Grow in faith. <br />
               Serve with excellence.”
             </p>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest pt-4 opacity-70">
-              Institutional Portal • Excellence in Education
-            </p>
           </motion.div>
         </div>
 
-        {/* Right Side: Login Card */}
+        {/* Login Form */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -151,10 +148,40 @@ export default function LoginPage() {
                 <Card className="border-white/20 shadow-2xl bg-white/10 backdrop-blur-2xl text-white border-none">
                   <CardHeader>
                     <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
-                    <CardDescription className="text-slate-300">Access your digital academic resources.</CardDescription>
+                    <CardDescription className="text-slate-300">Select your role and enter credentials.</CardDescription>
                   </CardHeader>
                   <form onSubmit={handleEmailLogin}>
                     <CardContent className="space-y-6">
+                      <div className="space-y-3">
+                        <Label className="text-slate-200 font-medium">Select Access Role</Label>
+                        <RadioGroup 
+                          defaultValue="visitor" 
+                          onValueChange={(val) => setSelectedRole(val as UserRole)}
+                          className="grid grid-cols-2 gap-4"
+                        >
+                          <div>
+                            <RadioGroupItem value="visitor" id="role-student" className="sr-only" />
+                            <Label
+                              htmlFor="role-student"
+                              className={`flex flex-col items-center justify-between rounded-xl border-2 p-4 hover:bg-white/5 cursor-pointer transition-all ${selectedRole === 'visitor' ? 'border-blue-500 bg-blue-500/10' : 'border-white/10'}`}
+                            >
+                              <UserCircle className={`mb-2 h-6 w-6 ${selectedRole === 'visitor' ? 'text-blue-400' : 'text-slate-400'}`} />
+                              <span className="text-xs font-bold uppercase tracking-wider">Student</span>
+                            </Label>
+                          </div>
+                          <div>
+                            <RadioGroupItem value="admin" id="role-admin" className="sr-only" />
+                            <Label
+                              htmlFor="role-admin"
+                              className={`flex flex-col items-center justify-between rounded-xl border-2 p-4 hover:bg-white/5 cursor-pointer transition-all ${selectedRole === 'admin' ? 'border-blue-500 bg-blue-500/10' : 'border-white/10'}`}
+                            >
+                              <ShieldCheck className={`mb-2 h-6 w-6 ${selectedRole === 'admin' ? 'text-blue-400' : 'text-slate-400'}`} />
+                              <span className="text-xs font-bold uppercase tracking-wider">Admin</span>
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+
                       <div className="space-y-2">
                         <Label htmlFor="email" className="text-slate-200 font-medium">Institutional Email</Label>
                         <div className="relative">
@@ -173,7 +200,7 @@ export default function LoginPage() {
                       <Button type="submit" className="w-full h-12 text-lg font-bold bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-900/40 group rounded-xl" disabled={loading}>
                         {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : (
                           <span className="flex items-center">
-                            Authorize Access
+                            Authorize {selectedRole === 'admin' ? 'Admin' : 'Student'} Access
                             <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                           </span>
                         )}
@@ -223,7 +250,6 @@ export default function LoginPage() {
         </motion.div>
       </div>
 
-      {/* Subtle Footer Overlay */}
       <div className="absolute bottom-8 left-0 right-0 text-center pointer-events-none">
         <p className="text-[10px] text-white/40 font-bold uppercase tracking-[0.4em]">
           New Era University • Institutional Library Data Management
