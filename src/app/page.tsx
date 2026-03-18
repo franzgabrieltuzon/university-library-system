@@ -1,16 +1,16 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { authStore, UserRole } from '@/lib/auth-store';
+import { authStore } from '@/lib/auth-store';
 import { getBlockedUsers } from '@/lib/mock-db';
-import { ShieldCheck, UserCheck, Mail, ArrowRight, Scan, Radio, Loader2 } from 'lucide-react';
+import { Mail, Radio, Loader2, Scan } from 'lucide-react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -28,7 +28,7 @@ export default function LoginPage() {
 
   const handleEmailLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    authenticate(email, 'visitor');
+    authenticate(email);
   };
 
   const handleRfidLogin = (e: React.FormEvent) => {
@@ -36,12 +36,12 @@ export default function LoginPage() {
     if (!rfidCode) return;
     setIsScanning(true);
     setTimeout(() => {
-      authenticate('rfid.user@neu.edu.ph', 'visitor');
+      authenticate('rfid.user@neu.edu.ph');
       setIsScanning(false);
-    }, 2000);
+    }, 1500);
   };
 
-  const authenticate = (userEmail: string, role: UserRole) => {
+  const authenticate = (userEmail: string) => {
     setLoading(true);
     const trimmedEmail = userEmail.toLowerCase().trim();
     
@@ -67,177 +67,136 @@ export default function LoginPage() {
         return;
       }
 
+      // Role logic: jcesperanza@neu.edu.ph is Admin, others are Visitors
+      const role = trimmedEmail === 'jcesperanza@neu.edu.ph' ? 'admin' : 'visitor';
+
       const mockUser = {
         id: Math.random().toString(),
         email: trimmedEmail,
-        name: trimmedEmail === 'rfid.user@neu.edu.ph' ? 'RFID Access User' : trimmedEmail.split('@')[0].split('.').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' '),
-        program: 'Information Technology',
-        college: 'College of Computer Studies',
+        name: trimmedEmail === 'rfid.user@neu.edu.ph' ? 'RFID User' : trimmedEmail.split('@')[0].split('.').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' '),
+        program: trimmedEmail === 'jcesperanza@neu.edu.ph' ? 'Administrative Services' : 'Information Technology',
+        college: 'University Administration',
         role: role,
-        isEmployee: trimmedEmail.includes('faculty') || trimmedEmail === 'jcesperanza@neu.edu.ph'
+        isEmployee: true
       };
 
       authStore.getState().setUser(mockUser);
       setLoading(false);
+      
       router.push(role === 'admin' ? '/admin' : '/visitor/welcome');
-    }, 1200);
+    }, 1000);
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-background cyber-grid relative overflow-hidden">
-      {/* Background Campus Image with Overlay */}
-      {campusImage && (
-        <div className="absolute inset-0 z-0">
-          <Image 
-            src={campusImage} 
-            alt="NEU Campus" 
-            fill 
-            className="object-cover opacity-30 grayscale"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
-        </div>
-      )}
-
-      {/* Background Glow */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] pointer-events-none z-0" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/20 rounded-full blur-[120px] pointer-events-none z-0" />
-
-      {/* Left Side: Branding */}
-      <div className="flex-1 hidden md:flex flex-col justify-center items-center p-12 relative z-10">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
-          className="z-10 text-center max-w-lg"
-        >
+    <div className="min-h-screen flex items-center justify-center bg-background subtle-grid p-4">
+      <div className="w-full max-w-5xl grid md:grid-cols-2 gap-8 items-center">
+        {/* Branding Section */}
+        <div className="hidden md:flex flex-col items-center text-center space-y-8">
           {logo && (
-            <div className="relative w-32 h-32 mx-auto mb-12 p-1 rounded-3xl bg-gradient-to-tr from-primary to-blue-400/20 shadow-2xl">
-              <div className="bg-background w-full h-full rounded-[1.4rem] flex items-center justify-center">
-                <Image src={logo} alt="NEU Logo" width={100} height={100} className="object-contain" />
-              </div>
+            <div className="relative w-40 h-40">
+              <Image src={logo} alt="NEU Logo" fill className="object-contain" priority />
             </div>
           )}
-          
-          <h1 className="text-5xl font-headline font-bold mb-6 text-white tracking-tighter">
-            New Era University <br/><span className="text-primary">Library</span>
-          </h1>
-          
-          <div className="glass-card p-8 rounded-3xl border-white/5 relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <p className="text-xl font-medium text-slate-300 leading-relaxed italic relative z-10">
-              "Learn with purpose.<br />
-              Grow in faith.<br />
-              Serve with excellence."
+          <div className="space-y-4">
+            <h1 className="text-4xl font-headline font-bold text-primary tracking-tight">
+              New Era University Library
+            </h1>
+            <p className="text-xl font-medium text-slate-600 italic">
+              “Learn with purpose. Grow in faith. Serve with excellence.”
             </p>
           </div>
+          {campusImage && (
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl">
+              <Image src={campusImage} alt="NEU Campus" fill className="object-cover" />
+              <div className="absolute inset-0 bg-primary/10" />
+            </div>
+          )}
+        </div>
 
-          <div className="mt-12 flex gap-4 justify-center text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
-            <span>Knowledge</span>
-            <span className="text-primary/40">•</span>
-            <span>Innovation</span>
-            <span className="text-primary/40">•</span>
-            <span>Faith</span>
+        {/* Login Form Section */}
+        <div className="flex flex-col space-y-8">
+          <div className="md:hidden flex flex-col items-center text-center space-y-4 mb-4">
+            {logo && <Image src={logo} alt="NEU Logo" width={80} height={80} className="object-contain" />}
+            <h1 className="text-2xl font-bold text-primary">NEU Library</h1>
           </div>
-        </motion.div>
-      </div>
 
-      {/* Right Side: Sign In */}
-      <div className="flex-1 flex flex-col justify-center items-center p-6 md:p-12 z-10">
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="w-full max-w-md"
-        >
-          <Tabs defaultValue="rfid" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-8 bg-card/50 border border-white/5 p-1 h-14 rounded-2xl">
-              <TabsTrigger value="rfid" className="rounded-xl data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg">
-                <Radio className="w-4 h-4 mr-2" />
-                RFID Scan
-              </TabsTrigger>
-              <TabsTrigger value="email" className="rounded-xl data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg">
-                <Mail className="w-4 h-4 mr-2" />
-                Credentials
-              </TabsTrigger>
+          <Tabs defaultValue="email" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="email">Institutional ID</TabsTrigger>
+              <TabsTrigger value="rfid">RFID Card</TabsTrigger>
             </TabsList>
 
             <AnimatePresence mode="wait">
-              <TabsContent value="rfid" key="rfid">
-                <Card className="glass-card border-none overflow-hidden">
-                  <CardHeader className="text-center pb-2">
-                    <CardTitle className="text-xl">Smart Access</CardTitle>
-                    <CardDescription>Scan your institutional RFID card to proceed.</CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex flex-col items-center py-8">
-                    <div className="relative w-48 h-48 mb-8 flex items-center justify-center">
-                      <motion.div
-                        animate={{ 
-                          scale: isScanning ? [1, 1.2, 1] : 1,
-                          rotate: isScanning ? 360 : 0
-                        }}
-                        transition={{ repeat: Infinity, duration: 2 }}
-                        className={`absolute inset-0 rounded-full border-2 border-dashed ${isScanning ? 'border-primary' : 'border-primary/20'}`}
-                      />
-                      <div className={`relative z-10 p-8 rounded-full bg-primary/10 border border-primary/20 ${isScanning ? 'neon-glow' : ''}`}>
-                        {isScanning ? (
-                          <Loader2 className="w-16 h-16 text-primary animate-spin" />
-                        ) : (
-                          <Scan className="w-16 h-16 text-primary" />
-                        )}
-                      </div>
-                    </div>
-                    <form onSubmit={handleRfidLogin} className="w-full space-y-4">
-                      <Input 
-                        placeholder="Waiting for RFID signal..." 
-                        className="bg-background/50 border-white/10 text-center h-12 rounded-xl"
-                        value={rfidCode}
-                        onChange={(e) => setRfidCode(e.target.value)}
-                        autoFocus
-                      />
-                      <Button type="submit" className="w-full h-12 rounded-xl neon-glow font-bold uppercase tracking-widest" disabled={loading || !rfidCode}>
-                        {loading ? 'Validating...' : 'Initialize Access'}
-                      </Button>
-                    </form>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
               <TabsContent value="email" key="email">
-                <Card className="glass-card border-none">
-                  <CardHeader className="text-center pb-2">
-                    <CardTitle className="text-xl">Legacy Access</CardTitle>
-                    <CardDescription>Enter your @neu.edu.ph credentials.</CardDescription>
+                <Card className="border-none shadow-lg">
+                  <CardHeader>
+                    <CardTitle className="text-xl">Sign In</CardTitle>
+                    <CardDescription>Enter your @neu.edu.ph email to proceed.</CardDescription>
                   </CardHeader>
                   <form onSubmit={handleEmailLogin}>
-                    <CardContent className="space-y-6 pt-4">
+                    <CardContent className="space-y-4">
                       <div className="space-y-2">
-                        <Label className="text-xs uppercase tracking-widest text-slate-500 font-bold">Email Address</Label>
+                        <Label htmlFor="email">Email Address</Label>
                         <div className="relative">
-                          <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                          <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                           <Input 
+                            id="email"
                             type="email" 
-                            placeholder="user@neu.edu.ph" 
-                            className="pl-12 h-12 bg-background/50 border-white/10 rounded-xl"
+                            placeholder="username@neu.edu.ph" 
+                            className="pl-10"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
                           />
                         </div>
                       </div>
-                      <Button type="submit" className="w-full h-12 rounded-xl neon-glow font-bold uppercase tracking-widest" disabled={loading}>
-                        {loading ? 'Authenticating...' : 'Sign In'}
+                      <Button type="submit" className="w-full h-11 font-bold" disabled={loading}>
+                        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Continue'}
                       </Button>
                     </CardContent>
                   </form>
                 </Card>
               </TabsContent>
+
+              <TabsContent value="rfid" key="rfid">
+                <Card className="border-none shadow-lg">
+                  <CardHeader>
+                    <CardTitle className="text-xl">RFID Access</CardTitle>
+                    <CardDescription>Scan your institutional card for instant check-in.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-col items-center py-6 space-y-6">
+                    <div className="relative w-32 h-32 flex items-center justify-center">
+                      <motion.div
+                        animate={{ scale: isScanning ? [1, 1.1, 1] : 1 }}
+                        transition={{ repeat: Infinity, duration: 2 }}
+                        className={`absolute inset-0 rounded-full border-2 border-dashed ${isScanning ? 'border-primary animate-spin-slow' : 'border-slate-200'}`}
+                      />
+                      <div className="p-6 rounded-full bg-slate-50 border shadow-inner">
+                        <Scan className={`w-12 h-12 ${isScanning ? 'text-primary' : 'text-slate-400'}`} />
+                      </div>
+                    </div>
+                    <form onSubmit={handleRfidLogin} className="w-full space-y-4">
+                      <Input 
+                        placeholder="Scan card now..." 
+                        className="text-center font-mono"
+                        value={rfidCode}
+                        onChange={(e) => setRfidCode(e.target.value)}
+                        autoFocus
+                      />
+                      <Button type="submit" className="w-full h-11 font-bold" disabled={loading || !rfidCode}>
+                        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Confirm Scan'}
+                      </Button>
+                    </form>
+                  </CardContent>
+                </Card>
+              </TabsContent>
             </AnimatePresence>
           </Tabs>
           
-          <p className="mt-8 text-center text-[10px] text-slate-600 uppercase tracking-[0.3em] font-bold">
-            NEU • DIGITAL ASSET MANAGEMENT SYSTEM • v2.0
+          <p className="text-center text-xs text-slate-400 font-medium">
+            &copy; {new Date().getFullYear()} New Era University • Library Systems
           </p>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
