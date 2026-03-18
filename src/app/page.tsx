@@ -76,9 +76,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-[#F5F7FA]">
       {/* Left Side: Illustration & Branding */}
-      <div className="flex-1 hidden md:flex flex-col justify-between items-center bg-primary text-white p-12 relative overflow-hidden">
+      <div className="flex-1 hidden md:flex flex-col justify-between items-center bg-black text-white p-12 relative overflow-hidden">
         {campusImage && (
-          <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 opacity-40">
             <Image 
               src={campusImage} 
               alt="NEU Campus" 
@@ -102,18 +102,20 @@ export default function LoginPage() {
               />
             </div>
           )}
-          <h1 className="font-headline font-bold text-5xl mb-6 leading-tight">New Era University Library</h1>
+          <h1 className="font-headline font-bold text-5xl mb-6 leading-tight text-white drop-shadow-md">
+            New Era University Library
+          </h1>
           <p className="text-xl text-white/80 font-body mb-10">
-            A seamless visitor management system for New Era University's modern library environment.
+            A seamless visitor management system for the Era of Excellence.
           </p>
           <div className="grid grid-cols-2 gap-4 text-left">
-            <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10">
-              <UserCheck className="w-6 h-6 mb-2 text-accent" />
+            <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10 hover:bg-white/15 transition-colors">
+              <UserCheck className="w-6 h-6 mb-2 text-[#eab308]" />
               <h3 className="font-bold">Fast Check-in</h3>
               <p className="text-sm text-white/60">Quick registration using institutional credentials.</p>
             </div>
-            <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10">
-              <ShieldCheck className="w-6 h-6 mb-2 text-accent" />
+            <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10 hover:bg-white/15 transition-colors">
+              <ShieldCheck className="w-6 h-6 mb-2 text-[#eab308]" />
               <h3 className="font-bold">Admin Insights</h3>
               <p className="text-sm text-white/60">Data-driven analytics for library improvement.</p>
             </div>
@@ -122,7 +124,7 @@ export default function LoginPage() {
 
         {/* Tagline Section */}
         <div className="z-10 w-full max-w-lg bg-black/40 backdrop-blur-md p-8 rounded-2xl border border-white/10 mt-12 transform hover:scale-[1.02] transition-transform duration-300">
-          <p className="text-2xl md:text-3xl font-headline font-bold text-accent text-center leading-snug">
+          <p className="text-2xl md:text-3xl font-headline font-bold text-[#eab308] text-center leading-snug">
             Learn with purpose.<br />
             Grow in faith.<br />
             Serve with excellence.
@@ -200,7 +202,7 @@ export default function LoginPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit" className="w-full h-12 text-lg font-bold bg-primary hover:bg-primary/90" disabled={loading}>
+              <Button type="submit" className="w-full h-12 text-lg font-bold bg-primary hover:bg-primary/90 text-white" disabled={loading}>
                 {loading ? 'Authenticating...' : 'Sign In with Google'}
                 {!loading && <ArrowRight className="ml-2 w-5 h-5" />}
               </Button>
@@ -208,7 +210,7 @@ export default function LoginPage() {
           </form>
         </Card>
         <p className="mt-8 text-sm text-muted-foreground">
-          Need help? Contact <span className="text-primary font-semibold">it.support@neu.edu.ph</span>
+          © {new Date().getFullYear()} New Era University
         </p>
       </div>
     </div>

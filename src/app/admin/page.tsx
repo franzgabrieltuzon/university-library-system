@@ -4,14 +4,12 @@ import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import MainLayout from '@/components/layout/MainLayout';
 import { authStore, User } from '@/lib/auth-store';
-import { getLogs, VisitorLog, COLLEGES, REASONS } from '@/lib/mock-db';
+import { getLogs, VisitorLog, COLLEGES } from '@/lib/mock-db';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Users, UserPlus, BookOpen, Clock, TrendingUp, Filter, Calendar as CalendarIcon, ShieldCheck } from 'lucide-react';
+import { Users, UserPlus, Clock, TrendingUp, Filter, ShieldCheck } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import AIInsights from '@/components/admin/AIInsights';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 export default function AdminDashboard() {
@@ -70,7 +68,8 @@ export default function AdminDashboard() {
     return { total, students, staff, chartData };
   }, [filteredLogs]);
 
-  const COLORS = ['#2752B3', '#39C0E3', '#1e40af', '#0ea5e9', '#0369a1'];
+  // Using Red, Green, Yellow/Gold for chart colors
+  const COLORS = ['#ef4444', '#16a34a', '#eab308', '#171717', '#94a3b8'];
 
   if (!user) return null;
 
@@ -143,14 +142,14 @@ export default function AdminDashboard() {
             value={stats.staff} 
             icon={ShieldCheck} 
             description="Academic members" 
-            color="bg-blue-800" 
+            color="bg-neutral-800" 
           />
           <StatCard 
             title="Avg. Visit Time" 
             value="1.5h" 
             icon={Clock} 
             description="Estimated duration" 
-            color="bg-cyan-600" 
+            color="bg-yellow-600" 
           />
         </div>
 
