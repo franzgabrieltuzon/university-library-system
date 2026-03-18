@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -48,7 +47,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 />
               </div>
             )}
-            <span className="font-headline font-bold text-xl text-primary tracking-tight">NEU Library Flow</span>
+            <span className="font-headline font-bold text-xl text-primary tracking-tight">New Era University Library</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
@@ -96,7 +95,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       </main>
       <footer className="border-t bg-white py-6">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} NEU Library Flow. Designed for Era of Excellence.
+          © {new Date().getFullYear()} New Era University Library. Designed for Era of Excellence.
         </div>
       </footer>
     </div>

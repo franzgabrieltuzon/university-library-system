@@ -1,11 +1,10 @@
-
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'NEU Library Flow',
-  description: 'Visitor log and analytics for NEU Library',
+  title: 'New Era University Library',
+  description: 'Visitor log and analytics for New Era University Library',
 };
 
 export default function RootLayout({

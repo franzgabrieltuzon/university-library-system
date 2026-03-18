@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -39,7 +38,7 @@ export default function WelcomePage() {
             <Sparkles className="w-8 h-8" />
           </div>
           <h1 className="text-4xl md:text-5xl font-headline font-bold text-primary mb-4">
-            Welcome to NEU Library!
+            Welcome to New Era University Library!
           </h1>
           <p className="text-xl text-muted-foreground">
             Validation successful. We're glad to have you here today.

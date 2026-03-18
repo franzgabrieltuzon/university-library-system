@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -79,7 +78,7 @@ export default function LoginPage() {
       {/* Left Side: Illustration & Branding */}
       <div className="flex-1 hidden md:flex flex-col justify-between items-center bg-primary text-white p-12 relative overflow-hidden">
         {campusImage && (
-          <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0 opacity-30">
             <Image 
               src={campusImage} 
               alt="NEU Campus" 
@@ -103,7 +102,7 @@ export default function LoginPage() {
               />
             </div>
           )}
-          <h1 className="font-headline font-bold text-5xl mb-6 leading-tight">NEU Library Flow</h1>
+          <h1 className="font-headline font-bold text-5xl mb-6 leading-tight">New Era University Library</h1>
           <p className="text-xl text-white/80 font-body mb-10">
             A seamless visitor management system for New Era University's modern library environment.
           </p>
