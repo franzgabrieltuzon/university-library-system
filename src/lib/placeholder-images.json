@@ -1,3 +1,28 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "library-hero",
+      "description": "Modern University Library Interior",
+      "imageUrl": "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1200&h=600&auto=format&fit=crop",
+      "imageHint": "library interior"
+    },
+    {
+      "id": "admin-avatar",
+      "description": "Default Admin Avatar",
+      "imageUrl": "https://picsum.photos/seed/admin/200/200",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "neu-campus",
+      "description": "New Era University Main Campus",
+      "imageUrl": "https://neu.edu.ph/main/assets/images/NEU_Main2.jpg",
+      "imageHint": "university building"
+    },
+    {
+      "id": "neu-logo",
+      "description": "New Era University Logo",
+      "imageUrl": "https://neu.edu.ph/main/assets/images/neu_logo_new.png",
+      "imageHint": "university logo"
+    }
+  ]
 }
