@@ -11,7 +11,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useToast } from '@/hooks/use-toast';
 import { authStore, UserRole } from '@/lib/auth-store';
 import { getBlockedUsers } from '@/lib/mock-db';
-import { Library, ShieldCheck, UserCheck, Mail, ArrowRight, Quote } from 'lucide-react';
+import { Library, ShieldCheck, UserCheck, Mail, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 
 export default function LoginPage() {
@@ -51,6 +51,7 @@ export default function LoginPage() {
 
       let finalRole = role;
       if (trimmedEmail === 'jcesperanza@neu.edu.ph') {
+        // Admin default for specific account
       } else if (role === 'admin') {
         toast({
           variant: 'destructive',
@@ -92,6 +93,7 @@ export default function LoginPage() {
             alt="NEU Campus" 
             fill 
             className="object-cover"
+            priority
             data-ai-hint="university building"
           />
         </div>
@@ -118,22 +120,13 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Philosophy, Mission, Vision subtle section */}
-        <div className="z-10 w-full max-w-2xl bg-black/30 backdrop-blur-md p-6 rounded-2xl border border-white/10 mt-12">
-          <div className="grid grid-cols-3 gap-6 text-xs text-white/70">
-            <div className="space-y-2">
-              <h4 className="font-bold text-accent uppercase tracking-tighter">Philosophy</h4>
-              <p className="italic">"Godliness is the foundation of knowledge."</p>
-            </div>
-            <div className="space-y-2 border-l border-white/10 pl-6">
-              <h4 className="font-bold text-accent uppercase tracking-tighter">Mission</h4>
-              <p>Provide quality education anchored on Christian values with the prime purpose of bringing honor and glory to God.</p>
-            </div>
-            <div className="space-y-2 border-l border-white/10 pl-6">
-              <h4 className="font-bold text-accent uppercase tracking-tighter">Vision</h4>
-              <p>A world-class Institution of learning with a unique Christian culture of excellence, discipline, and service to humanity.</p>
-            </div>
-          </div>
+        {/* Tagline Section */}
+        <div className="z-10 w-full max-w-lg bg-black/40 backdrop-blur-md p-8 rounded-2xl border border-white/10 mt-12 transform hover:scale-[1.02] transition-transform duration-300">
+          <p className="text-2xl md:text-3xl font-headline font-bold text-accent text-center leading-snug">
+            Learn with purpose.<br />
+            Grow in faith.<br />
+            Serve with excellence.
+          </p>
         </div>
       </div>
 
