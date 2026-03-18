@@ -16,7 +16,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
 
-  const logo = PlaceHolderImages.find(img => img.id === 'neu-logo')?.imageUrl || '';
+  const logo = PlaceHolderImages.find(img => img.id === 'neu-logo')?.imageUrl;
 
   useEffect(() => {
     const unsub = authStore.subscribe((state) => setUser(state.user));
@@ -38,14 +38,16 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href={user?.role === 'admin' ? '/admin' : '/visitor/welcome'} className="flex items-center gap-3">
-            <div className="relative w-10 h-10">
-              <Image 
-                src={logo} 
-                alt="NEU Logo" 
-                fill 
-                className="object-contain"
-              />
-            </div>
+            {logo && (
+              <div className="relative w-10 h-10">
+                <Image 
+                  src={logo} 
+                  alt="NEU Logo" 
+                  fill 
+                  className="object-contain"
+                />
+              </div>
+            )}
             <span className="font-headline font-bold text-xl text-primary tracking-tight">NEU Library Flow</span>
           </Link>
 

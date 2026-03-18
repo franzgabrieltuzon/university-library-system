@@ -22,8 +22,8 @@ export default function LoginPage() {
   const { toast } = useToast();
   const router = useRouter();
 
-  const logo = PlaceHolderImages.find(img => img.id === 'neu-logo')?.imageUrl || '';
-  const campusImage = PlaceHolderImages.find(img => img.id === 'neu-campus')?.imageUrl || '';
+  const logo = PlaceHolderImages.find(img => img.id === 'neu-logo')?.imageUrl;
+  const campusImage = PlaceHolderImages.find(img => img.id === 'neu-campus')?.imageUrl;
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,27 +78,31 @@ export default function LoginPage() {
     <div className="min-h-screen flex flex-col md:flex-row bg-[#F5F7FA]">
       {/* Left Side: Illustration & Branding */}
       <div className="flex-1 hidden md:flex flex-col justify-between items-center bg-primary text-white p-12 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <Image 
-            src={campusImage} 
-            alt="NEU Campus" 
-            fill 
-            className="object-cover"
-            priority
-            data-ai-hint="university building"
-          />
-        </div>
-        
-        <div className="z-10 text-center max-w-md mt-12">
-          <div className="bg-white/10 w-32 h-32 rounded-3xl flex items-center justify-center mx-auto mb-8 backdrop-blur-lg border border-white/20 p-4">
+        {campusImage && (
+          <div className="absolute inset-0 opacity-20">
             <Image 
-              src={logo} 
-              alt="NEU Logo" 
-              width={100} 
-              height={100} 
-              className="object-contain"
+              src={campusImage} 
+              alt="NEU Campus" 
+              fill 
+              className="object-cover"
+              priority
+              data-ai-hint="university building"
             />
           </div>
+        )}
+        
+        <div className="z-10 text-center max-w-md mt-12">
+          {logo && (
+            <div className="bg-white/10 w-32 h-32 rounded-3xl flex items-center justify-center mx-auto mb-8 backdrop-blur-lg border border-white/20 p-4">
+              <Image 
+                src={logo} 
+                alt="NEU Logo" 
+                width={100} 
+                height={100} 
+                className="object-contain"
+              />
+            </div>
+          )}
           <h1 className="font-headline font-bold text-5xl mb-6 leading-tight">NEU Library Flow</h1>
           <p className="text-xl text-white/80 font-body mb-10">
             A seamless visitor management system for New Era University's modern library environment.
@@ -131,15 +135,17 @@ export default function LoginPage() {
       <div className="flex-1 flex flex-col justify-center items-center p-6 md:p-12">
         <Card className="w-full max-w-md shadow-2xl border-none">
           <CardHeader className="space-y-1 text-center">
-            <div className="md:hidden flex justify-center mb-4">
-              <Image 
-                src={logo} 
-                alt="NEU Logo" 
-                width={60} 
-                height={60} 
-                className="object-contain"
-              />
-            </div>
+            {logo && (
+              <div className="md:hidden flex justify-center mb-4">
+                <Image 
+                  src={logo} 
+                  alt="NEU Logo" 
+                  width={60} 
+                  height={60} 
+                  className="object-contain"
+                />
+              </div>
+            )}
             <CardTitle className="text-3xl font-headline font-bold text-primary">Login to Library</CardTitle>
             <CardDescription className="text-base">
               Enter your @neu.edu.ph email to access.
