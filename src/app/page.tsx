@@ -11,8 +11,9 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useToast } from '@/hooks/use-toast';
 import { authStore, UserRole } from '@/lib/auth-store';
 import { getBlockedUsers } from '@/lib/mock-db';
-import { Library, ShieldCheck, UserCheck, Mail, ArrowRight } from 'lucide-react';
+import { ShieldCheck, UserCheck, Mail, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -20,6 +21,9 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+
+  const logo = PlaceHolderImages.find(img => img.id === 'neu-logo')?.imageUrl || '';
+  const campusImage = PlaceHolderImages.find(img => img.id === 'neu-campus')?.imageUrl || '';
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,33 +53,20 @@ export default function LoginPage() {
         return;
       }
 
-      let finalRole = role;
-      if (trimmedEmail === 'jcesperanza@neu.edu.ph') {
-        // Admin default for specific account
-      } else if (role === 'admin') {
-        toast({
-          variant: 'destructive',
-          title: 'Unauthorized',
-          description: 'You do not have administrator privileges.',
-        });
-        setLoading(false);
-        return;
-      }
-
       const mockUser = {
         id: Math.random().toString(),
         email: trimmedEmail,
         name: trimmedEmail.split('@')[0].split('.').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' '),
         program: trimmedEmail === 'jcesperanza@neu.edu.ph' ? 'Library Administration' : 'Information Technology',
         college: 'College of Computer Studies',
-        role: finalRole,
+        role: role,
         isEmployee: trimmedEmail.includes('faculty') || trimmedEmail === 'jcesperanza@neu.edu.ph'
       };
 
       authStore.getState().setUser(mockUser);
       setLoading(false);
       
-      if (finalRole === 'admin') {
+      if (role === 'admin') {
         router.push('/admin');
       } else {
         router.push('/visitor/welcome');
@@ -89,7 +80,7 @@ export default function LoginPage() {
       <div className="flex-1 hidden md:flex flex-col justify-between items-center bg-primary text-white p-12 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <Image 
-            src="https://neu.edu.ph/main/assets/images/NEU_Main2.jpg" 
+            src={campusImage} 
             alt="NEU Campus" 
             fill 
             className="object-cover"
@@ -99,8 +90,14 @@ export default function LoginPage() {
         </div>
         
         <div className="z-10 text-center max-w-md mt-12">
-          <div className="bg-white/10 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-8 backdrop-blur-lg border border-white/20">
-            <Library className="w-12 h-12 text-white" />
+          <div className="bg-white/10 w-32 h-32 rounded-3xl flex items-center justify-center mx-auto mb-8 backdrop-blur-lg border border-white/20 p-4">
+            <Image 
+              src={logo} 
+              alt="NEU Logo" 
+              width={100} 
+              height={100} 
+              className="object-contain"
+            />
           </div>
           <h1 className="font-headline font-bold text-5xl mb-6 leading-tight">NEU Library Flow</h1>
           <p className="text-xl text-white/80 font-body mb-10">
@@ -135,7 +132,13 @@ export default function LoginPage() {
         <Card className="w-full max-w-md shadow-2xl border-none">
           <CardHeader className="space-y-1 text-center">
             <div className="md:hidden flex justify-center mb-4">
-               <Library className="w-10 h-10 text-primary" />
+              <Image 
+                src={logo} 
+                alt="NEU Logo" 
+                width={60} 
+                height={60} 
+                className="object-contain"
+              />
             </div>
             <CardTitle className="text-3xl font-headline font-bold text-primary">Login to Library</CardTitle>
             <CardDescription className="text-base">

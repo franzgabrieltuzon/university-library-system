@@ -18,6 +18,12 @@
       "description": "New Era University Main Campus",
       "imageUrl": "https://neu.edu.ph/main/assets/images/NEU_Main2.jpg",
       "imageHint": "university building"
+    },
+    {
+      "id": "neu-logo",
+      "description": "New Era University Logo",
+      "imageUrl": "https://neu.edu.ph/main/assets/images/neu_logo_new.png",
+      "imageHint": "university logo"
     }
   ]
 }

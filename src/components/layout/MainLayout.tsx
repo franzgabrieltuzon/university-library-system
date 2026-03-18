@@ -5,14 +5,18 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { authStore, User } from '@/lib/auth-store';
 import { Button } from '@/components/ui/button';
-import { LogOut, LayoutDashboard, History, UserCheck, ShieldCheck, Library } from 'lucide-react';
+import { LogOut, LayoutDashboard, History, UserCheck, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
+
+  const logo = PlaceHolderImages.find(img => img.id === 'neu-logo')?.imageUrl || '';
 
   useEffect(() => {
     const unsub = authStore.subscribe((state) => setUser(state.user));
@@ -33,9 +37,14 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     <div className="min-h-screen flex flex-col bg-background">
       <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href={user?.role === 'admin' ? '/admin' : '/visitor/welcome'} className="flex items-center gap-2">
-            <div className="bg-primary p-2 rounded-lg">
-              <Library className="w-6 h-6 text-white" />
+          <Link href={user?.role === 'admin' ? '/admin' : '/visitor/welcome'} className="flex items-center gap-3">
+            <div className="relative w-10 h-10">
+              <Image 
+                src={logo} 
+                alt="NEU Logo" 
+                fill 
+                className="object-contain"
+              />
             </div>
             <span className="font-headline font-bold text-xl text-primary tracking-tight">NEU Library Flow</span>
           </Link>
