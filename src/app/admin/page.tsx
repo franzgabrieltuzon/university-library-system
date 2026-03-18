@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState, useMemo } from 'react';
@@ -9,10 +8,11 @@ import { getLogs, VisitorLog, COLLEGES, REASONS } from '@/lib/mock-db';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Users, UserPlus, BookOpen, Clock, TrendingUp, Filter, Calendar as CalendarIcon } from 'lucide-react';
+import { Users, UserPlus, BookOpen, Clock, TrendingUp, Filter, Calendar as CalendarIcon, ShieldCheck } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import AIInsights from '@/components/admin/AIInsights';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 export default function AdminDashboard() {
   const router = useRouter();
