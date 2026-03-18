@@ -5,17 +5,13 @@ import { useRouter, usePathname } from 'next/navigation';
 import { authStore, User } from '@/lib/auth-store';
 import { Button } from '@/components/ui/button';
 import { LogOut, LayoutDashboard, History, Users, Settings } from 'lucide-react';
-import Link from 'next/link';
+import Link from 'link';
 import { cn } from '@/lib/utils';
-import Image from 'next/image';
-import { PlaceHolderImages } from '@/app/lib/placeholder-images';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
-
-  const logo = PlaceHolderImages.find(img => img.id === 'neu-logo')?.imageUrl;
 
   useEffect(() => {
     const unsub = authStore.subscribe((state) => setUser(state.user));
@@ -33,17 +29,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F7FA]">
-      <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
+      <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md shadow-sm">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href={user?.role === 'admin' ? '/admin' : '/visitor/welcome'} className="flex items-center gap-3">
-            {logo && (
-              <div className="relative w-8 h-8">
-                <Image src={logo} alt="NEU Logo" fill className="object-contain" unoptimized />
-              </div>
-            )}
+          <Link href={user?.role === 'admin' ? '/admin' : '/visitor/welcome'} className="flex items-center gap-3 group">
             <div className="flex flex-col">
-              <span className="font-headline font-bold text-primary leading-none">NEU LIBRARY</span>
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Academic Portal</span>
+              <span className="font-headline font-bold text-primary leading-none group-hover:text-blue-600 transition-colors">NEU LIBRARY</span>
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Institutional Portal</span>
             </div>
           </Link>
 
