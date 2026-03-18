@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { authStore, User } from '@/lib/auth-store';
 import { Button } from '@/components/ui/button';
 import { LogOut, LayoutDashboard, History, Users, Settings } from 'lucide-react';
-import Link from 'link';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
@@ -33,7 +33,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           <Link href={user?.role === 'admin' ? '/admin' : '/visitor/welcome'} className="flex items-center gap-3 group">
             <div className="flex flex-col">
-              <span className="font-headline font-bold text-primary leading-none group-hover:text-blue-600 transition-colors">NEU LIBRARY</span>
+              <span className="font-headline font-bold text-primary leading-none group-hover:text-blue-600 transition-colors">NEW ERA UNIVERSITY LIBRARY</span>
               <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Institutional Portal</span>
             </div>
           </Link>
