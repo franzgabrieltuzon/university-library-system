@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, FileDown, Trash2, Printer, Filter, UserCheck, Mail, GraduationCap, Clock } from 'lucide-react';
+import { Search, FileDown, Printer, Mail, GraduationCap, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 
@@ -115,7 +115,7 @@ export default function VisitorLogsPage() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/30">
-                  <TableHead className="font-bold">Visitor Details</TableHead gold
+                  <TableHead className="font-bold">Visitor Details</TableHead>
                   <TableHead className="font-bold">Affiliation</TableHead>
                   <TableHead className="font-bold">Reason</TableHead>
                   <TableHead className="font-bold">Time In</TableHead>
