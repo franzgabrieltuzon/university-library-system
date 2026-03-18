@@ -52,7 +52,7 @@ export default function LoginPage() {
         toast({
           variant: 'destructive',
           title: 'Access Denied',
-          description: 'Institutional credentials required.',
+          description: 'Institutional credentials required (@neu.edu.ph).',
         });
         setLoading(false);
         return;
@@ -87,73 +87,54 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-6 overflow-hidden bg-slate-950">
-      {/* Campus Backdrop */}
+    <div className="relative min-h-screen flex items-center justify-center p-6 overflow-hidden bg-slate-900">
+      {/* Classy Campus Backdrop */}
       {campusImage && (
         <div className="fixed inset-0 z-0">
           <Image 
             src={campusImage} 
             alt="NEU Campus" 
             fill 
-            className="object-cover opacity-50 scale-105"
+            className="object-cover opacity-40 scale-105 blur-[2px]"
             priority
             unoptimized
           />
-          <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-950/80 to-slate-950/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-slate-900/90" />
         </div>
       )}
 
-      <div className="relative z-10 w-full max-w-4xl grid lg:grid-cols-2 gap-12 items-center">
-        {/* Branding & Tagline */}
-        <div className="flex flex-col text-white space-y-8">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-5xl lg:text-6xl font-headline font-bold leading-tight tracking-tight">
-              New Era University <span className="text-blue-400">Library</span>
-            </h1>
-            <div className="h-1.5 w-24 bg-blue-500 mt-6 rounded-full" />
-          </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="space-y-4"
-          >
-            <p className="text-2xl font-light text-slate-100 italic leading-relaxed">
-              “Learn with purpose. <br />
-              Grow in faith. <br />
-              Serve with excellence.”
-            </p>
-          </motion.div>
-        </div>
+      <div className="relative z-10 w-full max-w-lg">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-8 text-white"
+        >
+          <h1 className="text-4xl font-headline font-bold mb-2 tracking-tight">New Era University</h1>
+          <p className="text-lg font-light text-slate-300 italic">“Learn with purpose. Grow in faith. Serve with excellence.”</p>
+        </motion.div>
 
-        {/* Login Form */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
+          transition={{ delay: 0.2 }}
         >
           <Tabs defaultValue="email" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6 bg-white/10 backdrop-blur-xl p-1 rounded-xl border border-white/20">
-              <TabsTrigger value="email" className="text-slate-200 data-[state=active]:bg-white data-[state=active]:text-primary rounded-lg transition-all font-bold">Credentials</TabsTrigger>
-              <TabsTrigger value="rfid" className="text-slate-200 data-[state=active]:bg-white data-[state=active]:text-primary rounded-lg transition-all font-bold">RFID Card</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-6 bg-white/10 backdrop-blur-md p-1 border border-white/20 rounded-xl">
+              <TabsTrigger value="email" className="data-[state=active]:bg-white data-[state=active]:text-primary rounded-lg transition-all font-bold">Email Login</TabsTrigger>
+              <TabsTrigger value="rfid" className="data-[state=active]:bg-white data-[state=active]:text-primary rounded-lg transition-all font-bold">RFID Card</TabsTrigger>
             </TabsList>
 
             <AnimatePresence mode="wait">
               <TabsContent value="email" key="email-tab">
-                <Card className="border-white/20 shadow-2xl bg-white/10 backdrop-blur-2xl text-white border-none">
+                <Card className="border-none shadow-2xl bg-white/95 backdrop-blur-xl">
                   <CardHeader>
-                    <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
-                    <CardDescription className="text-slate-300">Select your role and enter credentials.</CardDescription>
+                    <CardTitle className="text-2xl font-bold text-primary">Portal Sign In</CardTitle>
+                    <CardDescription>Select your account role to proceed.</CardDescription>
                   </CardHeader>
                   <form onSubmit={handleEmailLogin}>
                     <CardContent className="space-y-6">
                       <div className="space-y-3">
-                        <Label className="text-slate-200 font-medium">Select Access Role</Label>
+                        <Label className="text-sm font-semibold text-slate-700">Account Role</Label>
                         <RadioGroup 
                           defaultValue="visitor" 
                           onValueChange={(val) => setSelectedRole(val as UserRole)}
@@ -163,9 +144,9 @@ export default function LoginPage() {
                             <RadioGroupItem value="visitor" id="role-student" className="sr-only" />
                             <Label
                               htmlFor="role-student"
-                              className={`flex flex-col items-center justify-between rounded-xl border-2 p-4 hover:bg-white/5 cursor-pointer transition-all ${selectedRole === 'visitor' ? 'border-blue-500 bg-blue-500/10' : 'border-white/10'}`}
+                              className={`flex flex-col items-center justify-center rounded-xl border-2 p-4 cursor-pointer transition-all ${selectedRole === 'visitor' ? 'border-primary bg-primary/5 text-primary' : 'border-slate-100 hover:bg-slate-50'}`}
                             >
-                              <UserCircle className={`mb-2 h-6 w-6 ${selectedRole === 'visitor' ? 'text-blue-400' : 'text-slate-400'}`} />
+                              <UserCircle className="mb-2 h-6 w-6" />
                               <span className="text-xs font-bold uppercase tracking-wider">Student</span>
                             </Label>
                           </div>
@@ -173,9 +154,9 @@ export default function LoginPage() {
                             <RadioGroupItem value="admin" id="role-admin" className="sr-only" />
                             <Label
                               htmlFor="role-admin"
-                              className={`flex flex-col items-center justify-between rounded-xl border-2 p-4 hover:bg-white/5 cursor-pointer transition-all ${selectedRole === 'admin' ? 'border-blue-500 bg-blue-500/10' : 'border-white/10'}`}
+                              className={`flex flex-col items-center justify-center rounded-xl border-2 p-4 cursor-pointer transition-all ${selectedRole === 'admin' ? 'border-primary bg-primary/5 text-primary' : 'border-slate-100 hover:bg-slate-50'}`}
                             >
-                              <ShieldCheck className={`mb-2 h-6 w-6 ${selectedRole === 'admin' ? 'text-blue-400' : 'text-slate-400'}`} />
+                              <ShieldCheck className="mb-2 h-6 w-6" />
                               <span className="text-xs font-bold uppercase tracking-wider">Admin</span>
                             </Label>
                           </div>
@@ -183,24 +164,24 @@ export default function LoginPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="email" className="text-slate-200 font-medium">Institutional Email</Label>
+                        <Label htmlFor="email" className="text-sm font-semibold text-slate-700">Institutional Email</Label>
                         <div className="relative">
-                          <Mail className="absolute left-3 top-3.5 h-4 w-4 text-blue-400" />
+                          <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                           <Input 
                             id="email"
                             type="email" 
                             placeholder="username@neu.edu.ph" 
-                            className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-slate-400 focus:ring-blue-500 h-12 rounded-xl"
+                            className="pl-10 h-11 border-slate-200 focus:ring-primary"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
                           />
                         </div>
                       </div>
-                      <Button type="submit" className="w-full h-12 text-lg font-bold bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-900/40 group rounded-xl" disabled={loading}>
+                      <Button type="submit" className="w-full h-11 text-lg font-bold bg-primary hover:bg-primary/90 shadow-lg group" disabled={loading}>
                         {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : (
                           <span className="flex items-center">
-                            Authorize {selectedRole === 'admin' ? 'Admin' : 'Student'} Access
+                            Continue as {selectedRole === 'admin' ? 'Admin' : 'Student'}
                             <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                           </span>
                         )}
@@ -211,35 +192,35 @@ export default function LoginPage() {
               </TabsContent>
 
               <TabsContent value="rfid" key="rfid-tab">
-                <Card className="border-white/20 shadow-2xl bg-white/10 backdrop-blur-2xl text-white border-none">
+                <Card className="border-none shadow-2xl bg-white/95 backdrop-blur-xl">
                   <CardHeader>
-                    <CardTitle className="text-2xl font-bold">RFID Validation</CardTitle>
-                    <CardDescription className="text-slate-300">Place your ID card on the reader.</CardDescription>
+                    <CardTitle className="text-2xl font-bold text-primary">RFID Sign In</CardTitle>
+                    <CardDescription>Place your card on the reader.</CardDescription>
                   </CardHeader>
-                  <CardContent className="flex flex-col items-center py-10 space-y-8">
-                    <div className="relative w-32 h-32 flex items-center justify-center">
+                  <CardContent className="flex flex-col items-center py-8 space-y-6">
+                    <div className="relative w-28 h-28 flex items-center justify-center">
                       <motion.div
                         animate={{ 
                           scale: isScanning ? [1, 1.1, 1] : 1,
                           rotate: isScanning ? 360 : 0
                         }}
                         transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-                        className={`absolute inset-0 rounded-full border-2 border-dashed ${isScanning ? 'border-blue-400' : 'border-white/20'}`}
+                        className={`absolute inset-0 rounded-full border-2 border-dashed ${isScanning ? 'border-primary' : 'border-slate-200'}`}
                       />
-                      <div className="p-8 rounded-full bg-white/10 border border-white/20 shadow-inner">
-                        <Scan className={`w-12 h-12 ${isScanning ? 'text-blue-400' : 'text-slate-400'}`} />
+                      <div className="p-6 rounded-full bg-primary/5 border border-primary/10">
+                        <Scan className={`w-10 h-10 ${isScanning ? 'text-primary' : 'text-slate-300'}`} />
                       </div>
                     </div>
                     <form onSubmit={handleRfidLogin} className="w-full space-y-4">
                       <Input 
                         placeholder="Awaiting sensor input..." 
-                        className="text-center font-mono bg-white/10 border-white/20 text-white h-12 rounded-xl"
+                        className="text-center font-mono border-slate-200"
                         value={rfidCode}
                         onChange={(e) => setRfidCode(e.target.value)}
                         autoFocus
                       />
-                      <Button type="submit" className="w-full h-12 text-lg font-bold bg-blue-600 hover:bg-blue-500 shadow-lg rounded-xl" disabled={loading || !rfidCode}>
-                        {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : 'Confirm Identity'}
+                      <Button type="submit" className="w-full h-11 text-lg font-bold bg-primary hover:bg-primary/90 shadow-lg" disabled={loading || !rfidCode}>
+                        {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : 'Validate Identity'}
                       </Button>
                     </form>
                   </CardContent>
@@ -250,8 +231,8 @@ export default function LoginPage() {
         </motion.div>
       </div>
 
-      <div className="absolute bottom-8 left-0 right-0 text-center pointer-events-none">
-        <p className="text-[10px] text-white/40 font-bold uppercase tracking-[0.4em]">
+      <div className="absolute bottom-6 left-0 right-0 text-center text-white/40">
+        <p className="text-[10px] font-bold uppercase tracking-widest">
           New Era University • Institutional Library Data Management
         </p>
       </div>
