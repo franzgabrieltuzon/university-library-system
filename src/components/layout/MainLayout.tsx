@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -35,9 +36,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     <div className="min-h-screen flex flex-col bg-slate-50">
       <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href={user?.role === 'admin' ? '/admin' : '/visitor/welcome'} className="flex items-center gap-3">
+          <Link href={user?.role === 'admin' ? '/admin' : '/visitor/welcome'} className="flex items-center gap-3 group">
             {logo && (
-              <div className="relative w-9 h-9">
+              <div className="relative w-10 h-10 transition-transform group-hover:scale-110">
                 <Image 
                   src={logo} 
                   alt="NEU Logo" 

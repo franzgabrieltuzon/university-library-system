@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -78,12 +79,12 @@ export default function LoginPage() {
       {/* Left Side: Branding */}
       <div className="flex-1 hidden md:flex flex-col justify-center items-center bg-primary text-white p-12 relative overflow-hidden">
         {campusImage && (
-          <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0 z-0">
             <Image 
               src={campusImage} 
               alt="NEU Campus" 
               fill 
-              className="object-cover grayscale brightness-50"
+              className="object-cover opacity-30 mix-blend-overlay"
               priority
               data-ai-hint="university building"
             />
@@ -92,12 +93,12 @@ export default function LoginPage() {
         
         <div className="z-10 text-center max-w-md">
           {logo && (
-            <div className="bg-white w-24 h-24 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-xl p-3">
+            <div className="bg-white w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-10 shadow-2xl p-2 border-4 border-white">
               <Image 
                 src={logo} 
                 alt="NEU Logo" 
-                width={80} 
-                height={80} 
+                width={100} 
+                height={100} 
                 className="object-contain"
               />
             </div>
@@ -120,8 +121,8 @@ export default function LoginPage() {
       </div>
 
       {/* Right Side: Login Form */}
-      <div className="flex-1 flex flex-col justify-center items-center p-6 md:p-12">
-        <Card className="w-full max-w-md shadow-xl border-none bg-white">
+      <div className="flex-1 flex flex-col justify-center items-center p-6 md:p-12 bg-white">
+        <Card className="w-full max-w-md shadow-2xl border-none">
           <CardHeader className="space-y-1 text-center pb-8">
             <CardTitle className="text-2xl font-headline font-bold text-slate-900">Sign In</CardTitle>
             <CardDescription className="text-slate-500">
@@ -157,7 +158,7 @@ export default function LoginPage() {
                     <RadioGroupItem value="visitor" id="visitor" className="peer sr-only" />
                     <Label
                       htmlFor="visitor"
-                      className="flex flex-col items-center justify-between rounded-xl border-2 border-slate-100 bg-white p-4 hover:bg-slate-50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-blue-50/50 transition-all cursor-pointer"
+                      className="flex flex-col items-center justify-between rounded-xl border-2 border-slate-100 bg-white p-4 hover:bg-slate-50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-blue-50 transition-all cursor-pointer"
                     >
                       <UserCheck className="mb-2 h-5 w-5 text-primary" />
                       <span className="font-semibold text-sm">Visitor</span>
@@ -167,7 +168,7 @@ export default function LoginPage() {
                     <RadioGroupItem value="admin" id="admin" className="peer sr-only" />
                     <Label
                       htmlFor="admin"
-                      className="flex flex-col items-center justify-between rounded-xl border-2 border-slate-100 bg-white p-4 hover:bg-slate-50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-blue-50/50 transition-all cursor-pointer"
+                      className="flex flex-col items-center justify-between rounded-xl border-2 border-slate-100 bg-white p-4 hover:bg-slate-50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-blue-50 transition-all cursor-pointer"
                     >
                       <ShieldCheck className="mb-2 h-5 w-5 text-primary" />
                       <span className="font-semibold text-sm">Admin</span>
@@ -185,7 +186,7 @@ export default function LoginPage() {
           </form>
         </Card>
         <p className="mt-8 text-xs text-slate-400">
-          © {new Date().getFullYear()} New Era University • All rights reserved.
+          © {new Date().getFullYear()} New Era University • Institutional Library System
         </p>
       </div>
     </div>
