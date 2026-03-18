@@ -12,6 +12,12 @@
       "description": "Default Admin Avatar",
       "imageUrl": "https://picsum.photos/seed/admin/200/200",
       "imageHint": "person portrait"
+    },
+    {
+      "id": "neu-campus",
+      "description": "New Era University Main Campus",
+      "imageUrl": "https://neu.edu.ph/main/assets/images/NEU_Main2.jpg",
+      "imageHint": "university building"
     }
   ]
 }

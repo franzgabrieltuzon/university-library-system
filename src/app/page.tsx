@@ -11,7 +11,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useToast } from '@/hooks/use-toast';
 import { authStore, UserRole } from '@/lib/auth-store';
 import { getBlockedUsers } from '@/lib/mock-db';
-import { Library, ShieldCheck, UserCheck, Mail, ArrowRight } from 'lucide-react';
+import { Library, ShieldCheck, UserCheck, Mail, ArrowRight, Quote } from 'lucide-react';
 import Image from 'next/image';
 
 export default function LoginPage() {
@@ -25,7 +25,6 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
 
-    // Mock Authentication Logic
     setTimeout(() => {
       const trimmedEmail = email.toLowerCase().trim();
       
@@ -50,10 +49,8 @@ export default function LoginPage() {
         return;
       }
 
-      // Role switching capability for special user
       let finalRole = role;
       if (trimmedEmail === 'jcesperanza@neu.edu.ph') {
-        // Special case: can be both. We use the selected role.
       } else if (role === 'admin') {
         toast({
           variant: 'destructive',
@@ -88,18 +85,19 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-[#F5F7FA]">
       {/* Left Side: Illustration & Branding */}
-      <div className="flex-1 hidden md:flex flex-col justify-center items-center bg-primary text-white p-12 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
+      <div className="flex-1 hidden md:flex flex-col justify-between items-center bg-primary text-white p-12 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
           <Image 
-            src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1200" 
-            alt="Library" 
+            src="https://neu.edu.ph/main/assets/images/NEU_Main2.jpg" 
+            alt="NEU Campus" 
             fill 
             className="object-cover"
-            data-ai-hint="library interior"
+            data-ai-hint="university building"
           />
         </div>
-        <div className="z-10 text-center max-w-md">
-          <div className="bg-white/10 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-8 backdrop-blur-lg">
+        
+        <div className="z-10 text-center max-w-md mt-12">
+          <div className="bg-white/10 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-8 backdrop-blur-lg border border-white/20">
             <Library className="w-12 h-12 text-white" />
           </div>
           <h1 className="font-headline font-bold text-5xl mb-6 leading-tight">NEU Library Flow</h1>
@@ -107,15 +105,33 @@ export default function LoginPage() {
             A seamless visitor management system for New Era University's modern library environment.
           </p>
           <div className="grid grid-cols-2 gap-4 text-left">
-            <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm">
+            <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10">
               <UserCheck className="w-6 h-6 mb-2 text-accent" />
               <h3 className="font-bold">Fast Check-in</h3>
               <p className="text-sm text-white/60">Quick registration using institutional credentials.</p>
             </div>
-            <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm">
+            <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10">
               <ShieldCheck className="w-6 h-6 mb-2 text-accent" />
               <h3 className="font-bold">Admin Insights</h3>
               <p className="text-sm text-white/60">Data-driven analytics for library improvement.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Philosophy, Mission, Vision subtle section */}
+        <div className="z-10 w-full max-w-2xl bg-black/30 backdrop-blur-md p-6 rounded-2xl border border-white/10 mt-12">
+          <div className="grid grid-cols-3 gap-6 text-xs text-white/70">
+            <div className="space-y-2">
+              <h4 className="font-bold text-accent uppercase tracking-tighter">Philosophy</h4>
+              <p className="italic">"Godliness is the foundation of knowledge."</p>
+            </div>
+            <div className="space-y-2 border-l border-white/10 pl-6">
+              <h4 className="font-bold text-accent uppercase tracking-tighter">Mission</h4>
+              <p>Provide quality education anchored on Christian values with the prime purpose of bringing honor and glory to God.</p>
+            </div>
+            <div className="space-y-2 border-l border-white/10 pl-6">
+              <h4 className="font-bold text-accent uppercase tracking-tighter">Vision</h4>
+              <p>A world-class Institution of learning with a unique Christian culture of excellence, discipline, and service to humanity.</p>
             </div>
           </div>
         </div>
