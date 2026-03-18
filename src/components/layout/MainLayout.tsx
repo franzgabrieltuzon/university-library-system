@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { authStore, User } from '@/lib/auth-store';
 import { Button } from '@/components/ui/button';
-import { LogOut, LayoutDashboard, History, UserCheck, ShieldCheck } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
@@ -37,7 +37,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           <Link href={user?.role === 'admin' ? '/admin' : '/visitor/welcome'} className="flex items-center gap-3 group">
-            {logo && (
+            {logo ? (
               <div className="relative w-10 h-10 transition-transform group-hover:scale-110">
                 <Image 
                   src={logo} 
@@ -46,6 +46,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                   className="object-contain"
                 />
               </div>
+            ) : (
+              <div className="w-10 h-10 bg-primary rounded-full" />
             )}
             <span className="font-headline font-bold text-lg text-slate-900 hidden sm:inline-block">New Era University Library</span>
           </Link>
@@ -74,7 +76,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           <div className="flex items-center gap-4">
             <div className="hidden lg:flex flex-col items-end leading-none">
               <span className="text-sm font-semibold text-slate-900">{user?.name}</span>
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{user?.role}</span>
+              <span className="text-[10px] text-primary font-bold uppercase tracking-wider">{user?.role}</span>
             </div>
             <Button variant="ghost" size="sm" className="h-9 px-3 text-slate-500 hover:text-red-600 hover:bg-red-50" onClick={() => {
               authStore.getState().logout();

@@ -93,12 +93,12 @@ export default function LoginPage() {
         
         <div className="z-10 text-center max-w-md">
           {logo && (
-            <div className="bg-white w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-10 shadow-2xl p-2 border-4 border-white">
+            <div className="bg-white w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-10 shadow-2xl p-2 border-4 border-white">
               <Image 
                 src={logo} 
                 alt="NEU Logo" 
-                width={100} 
-                height={100} 
+                width={110} 
+                height={110} 
                 className="object-contain"
               />
             </div>
@@ -106,12 +106,9 @@ export default function LoginPage() {
           <h1 className="font-headline font-bold text-4xl mb-4 leading-tight">
             New Era University Library
           </h1>
-          <p className="text-lg text-white/90 font-body mb-12">
-            Providing a world-class environment for academic excellence and spiritual growth.
-          </p>
           
-          <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl border border-white/20 shadow-2xl">
-            <p className="text-xl md:text-2xl font-headline font-bold text-white leading-relaxed">
+          <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl border border-white/20 shadow-2xl mt-12">
+            <p className="text-xl md:text-2xl font-headline font-bold text-white leading-relaxed italic">
               "Learn with purpose.<br />
               Grow in faith.<br />
               Serve with excellence."
