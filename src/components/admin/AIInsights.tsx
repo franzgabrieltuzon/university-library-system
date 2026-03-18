@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -31,63 +30,62 @@ export default function AIInsights({ reasons }: AIInsightsProps) {
   };
 
   return (
-    <Card className="border-accent/30 shadow-lg bg-gradient-to-br from-white to-accent/5">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <div className="space-y-1">
-          <CardTitle className="text-xl font-headline font-bold flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-accent" />
-            AI Visit Analysis
-          </CardTitle>
-          <CardDescription>
-            Pattern detection from unstructured visitor reasons.
-          </CardDescription>
+    <Card className="border-blue-100 shadow-sm bg-blue-50/30">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between mb-2">
+          <Badge variant="outline" className="bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-100">
+            <Sparkles className="w-3 h-3 mr-1" />
+            AI Insights
+          </Badge>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={generateInsights} 
+            disabled={loading || reasons.length === 0}
+            className="h-8 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-100/50"
+          >
+            {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCcw className="w-3 h-3" />}
+          </Button>
         </div>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={generateInsights} 
-          disabled={loading || reasons.length === 0}
-          className="bg-white"
-        >
-          {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <RefreshCcw className="w-4 h-4 mr-2" />}
-          {result ? 'Refresh Analysis' : 'Generate Analysis'}
-        </Button>
+        <CardTitle className="text-lg font-bold">Analysis</CardTitle>
+        <CardDescription className="text-xs">
+          Smart patterns from visitor logs.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-12 space-y-4">
-            <Loader2 className="w-10 h-10 animate-spin text-accent" />
-            <p className="text-muted-foreground animate-pulse">Gemini is analyzing {reasons.length} visit logs...</p>
+          <div className="flex flex-col items-center justify-center py-12 space-y-3">
+            <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
+            <p className="text-xs text-slate-500 font-medium">Analyzing data...</p>
           </div>
         ) : result ? (
-          <div className="space-y-6 animate-in fade-in duration-700">
-            <div className="bg-white/50 p-4 rounded-lg border border-accent/20">
-              <h4 className="font-bold text-sm uppercase tracking-wider text-accent mb-2">Overall Summary</h4>
-              <p className="text-sm leading-relaxed">{result.overallSummary}</p>
+          <div className="space-y-4 animate-in fade-in duration-500">
+            <div className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm">
+              <h4 className="font-bold text-[10px] uppercase tracking-wider text-blue-600 mb-1">Summary</h4>
+              <p className="text-xs leading-relaxed text-slate-600">{result.overallSummary}</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {result.categorizedReasons.map((cat, idx) => (
-                <div key={idx} className="bg-white rounded-lg p-3 border shadow-sm">
-                  <Badge variant="secondary" className="mb-2 bg-accent/10 text-accent border-accent/20">
+            <div className="space-y-2">
+              {result.categorizedReasons.slice(0, 3).map((cat, idx) => (
+                <div key={idx} className="bg-white rounded-lg p-3 border border-slate-100">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter block mb-1">
                     {cat.category}
-                  </Badge>
-                  <ScrollArea className="h-24">
-                    <ul className="text-xs space-y-1 text-muted-foreground list-disc pl-4">
-                      {cat.reasons.map((r, i) => <li key={i}>{r}</li>)}
-                    </ul>
-                  </ScrollArea>
+                  </span>
+                  <div className="flex flex-wrap gap-1">
+                    {cat.reasons.slice(0, 2).map((r, i) => (
+                      <span key={i} className="text-[10px] bg-slate-50 px-2 py-0.5 rounded-full text-slate-600 border border-slate-100">
+                        {r}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-8 text-center bg-white/30 rounded-lg border border-dashed">
-            <Sparkles className="w-8 h-8 text-muted-foreground mb-2 opacity-50" />
-            <p className="text-sm text-muted-foreground">
-              {reasons.length > 0 
-                ? `Ready to analyze ${reasons.length} visitor reasons.` 
-                : "No visitor data available for analysis."}
+          <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-blue-100 rounded-xl bg-white/50">
+            <p className="text-xs text-slate-400 max-w-[160px]">
+              Click the refresh icon to generate AI-powered visit insights.
             </p>
           </div>
         )}

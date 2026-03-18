@@ -19,7 +19,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   useEffect(() => {
     const unsub = authStore.subscribe((state) => setUser(state.user));
-    // Initial check
     const currentUser = authStore.getState().user;
     setUser(currentUser);
     
@@ -33,12 +32,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   if (!user && pathname !== '/') return null;
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md shadow-sm">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+    <div className="min-h-screen flex flex-col bg-slate-50">
+      <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           <Link href={user?.role === 'admin' ? '/admin' : '/visitor/welcome'} className="flex items-center gap-3">
             {logo && (
-              <div className="relative w-10 h-10">
+              <div className="relative w-9 h-9">
                 <Image 
                   src={logo} 
                   alt="NEU Logo" 
@@ -47,55 +46,55 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 />
               </div>
             )}
-            <span className="font-headline font-bold text-xl text-primary tracking-tight">New Era University Library</span>
+            <span className="font-headline font-bold text-lg text-slate-900 hidden sm:inline-block">New Era University Library</span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1 bg-slate-100/50 p-1 rounded-lg">
             {user?.role === 'admin' && (
               <>
                 <NavLink href="/admin" active={pathname === '/admin'}>
-                  <LayoutDashboard className="w-4 h-4 mr-2" />
                   Dashboard
                 </NavLink>
                 <NavLink href="/admin/logs" active={pathname === '/admin/logs'}>
-                  <History className="w-4 h-4 mr-2" />
-                  Visitor Logs
+                  Logs
                 </NavLink>
                 <NavLink href="/admin/users" active={pathname === '/admin/users'}>
-                  <ShieldCheck className="w-4 h-4 mr-2" />
-                  Management
+                  Users
                 </NavLink>
               </>
             )}
             {user?.role === 'visitor' && (
               <NavLink href="/visitor/check-in" active={pathname === '/visitor/check-in'}>
-                <UserCheck className="w-4 h-4 mr-2" />
                 Check-in
               </NavLink>
             )}
           </nav>
 
           <div className="flex items-center gap-4">
-            <div className="hidden sm:flex flex-col items-end mr-2">
-              <span className="text-sm font-semibold">{user?.name}</span>
-              <span className="text-xs text-muted-foreground capitalize">{user?.role}</span>
+            <div className="hidden lg:flex flex-col items-end leading-none">
+              <span className="text-sm font-semibold text-slate-900">{user?.name}</span>
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{user?.role}</span>
             </div>
-            <Button variant="outline" size="sm" onClick={() => {
+            <Button variant="ghost" size="sm" className="h-9 px-3 text-slate-500 hover:text-red-600 hover:bg-red-50" onClick={() => {
               authStore.getState().logout();
               router.push('/');
             }}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
+              <LogOut className="w-4 h-4" />
             </Button>
           </div>
         </div>
       </header>
-      <main className="flex-1 container mx-auto px-4 py-8">
+      <main className="flex-1 container mx-auto px-6 py-10">
         {children}
       </main>
-      <footer className="border-t bg-white py-6">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} New Era University Library. Designed for Era of Excellence.
+      <footer className="border-t bg-white py-8">
+        <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+          <p>© {new Date().getFullYear()} New Era University • Institutional Library System</p>
+          <div className="flex gap-6">
+            <span className="hover:text-primary cursor-pointer">Privacy Policy</span>
+            <span className="hover:text-primary cursor-pointer">Terms of Service</span>
+            <span className="hover:text-primary cursor-pointer">Support</span>
+          </div>
         </div>
       </footer>
     </div>
@@ -107,10 +106,10 @@ function NavLink({ href, children, active }: { href: string, children: React.Rea
     <Link 
       href={href}
       className={cn(
-        "flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors",
+        "px-4 py-1.5 rounded-md text-sm font-medium transition-all",
         active 
-          ? "bg-primary/10 text-primary font-bold" 
-          : "text-muted-foreground hover:bg-accent/10 hover:text-accent-foreground"
+          ? "bg-white text-primary shadow-sm" 
+          : "text-slate-500 hover:text-slate-900"
       )}
     >
       {children}

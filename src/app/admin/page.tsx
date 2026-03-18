@@ -16,7 +16,7 @@ export default function AdminDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [logs, setLogs] = useState<VisitorLog[]>([]);
-  const [timeRange, setTimeRange] = useState('day'); // day, week, month, all
+  const [timeRange, setTimeRange] = useState('day');
   const [filterCollege, setFilterCollege] = useState('all');
   const [filterType, setFilterType] = useState('all');
 
@@ -57,7 +57,6 @@ export default function AdminDashboard() {
     const students = filteredLogs.filter(l => !l.isEmployee).length;
     const staff = filteredLogs.filter(l => l.isEmployee).length;
     
-    // Group by reason
     const reasonCounts: Record<string, number> = {};
     filteredLogs.forEach(l => {
       reasonCounts[l.reason] = (reasonCounts[l.reason] || 0) + 1;
@@ -68,8 +67,8 @@ export default function AdminDashboard() {
     return { total, students, staff, chartData };
   }, [filteredLogs]);
 
-  // Using Red, Green, Yellow/Gold for chart colors
-  const COLORS = ['#ef4444', '#16a34a', '#eab308', '#171717', '#94a3b8'];
+  // Professional Blue palette
+  const COLORS = ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe'];
 
   if (!user) return null;
 
@@ -78,114 +77,55 @@ export default function AdminDashboard() {
       <div className="space-y-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-headline font-bold text-primary">Admin Dashboard</h1>
-            <p className="text-muted-foreground">Real-time statistics and library usage insights.</p>
+            <h1 className="text-2xl font-headline font-bold text-slate-900">Dashboard</h1>
+            <p className="text-slate-500 text-sm">Overview of library occupancy and usage metrics.</p>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-2 px-3 py-2 bg-white rounded-lg border shadow-sm">
-              <Filter className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm font-medium mr-2">Filters:</span>
-              <Select value={timeRange} onValueChange={setTimeRange}>
-                <SelectTrigger className="w-[120px] h-8 text-xs">
-                  <SelectValue placeholder="Period" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="day">Today</SelectItem>
-                  <SelectItem value="week">This Week</SelectItem>
-                  <SelectItem value="month">This Month</SelectItem>
-                  <SelectItem value="all">All Time</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select value={filterCollege} onValueChange={setFilterCollege}>
-                <SelectTrigger className="w-[150px] h-8 text-xs">
-                  <SelectValue placeholder="College" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Colleges</SelectItem>
-                  {COLLEGES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                </SelectContent>
-              </Select>
-
-              <Select value={filterType} onValueChange={setFilterType}>
-                <SelectTrigger className="w-[120px] h-8 text-xs">
-                  <SelectValue placeholder="User Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Users</SelectItem>
-                  <SelectItem value="Student">Students</SelectItem>
-                  <SelectItem value="Employee">Employee/Staff</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="flex items-center gap-2 p-1 bg-slate-100 rounded-lg">
+            <Select value={timeRange} onValueChange={setTimeRange}>
+              <SelectTrigger className="w-[110px] h-9 border-none bg-transparent">
+                <SelectValue placeholder="Period" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="day">Today</SelectItem>
+                <SelectItem value="week">Weekly</SelectItem>
+                <SelectItem value="month">Monthly</SelectItem>
+                <SelectItem value="all">Overall</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCard 
-            title="Total Visitors" 
-            value={stats.total} 
-            icon={Users} 
-            description={`Total for ${timeRange}`} 
-            color="bg-primary" 
-          />
-          <StatCard 
-            title="Students" 
-            value={stats.students} 
-            icon={UserPlus} 
-            description="Active learners" 
-            color="bg-accent" 
-          />
-          <StatCard 
-            title="Faculty/Staff" 
-            value={stats.staff} 
-            icon={ShieldCheck} 
-            description="Academic members" 
-            color="bg-neutral-800" 
-          />
-          <StatCard 
-            title="Avg. Visit Time" 
-            value="1.5h" 
-            icon={Clock} 
-            description="Estimated duration" 
-            color="bg-yellow-600" 
-          />
+          <StatCard title="Total Visitors" value={stats.total} icon={Users} color="text-blue-600" bgColor="bg-blue-50" />
+          <StatCard title="Students" value={stats.students} icon={UserPlus} color="text-indigo-600" bgColor="bg-indigo-50" />
+          <StatCard title="Faculty & Staff" value={stats.staff} icon={ShieldCheck} color="text-cyan-600" bgColor="bg-cyan-50" />
+          <StatCard title="Avg. Visit" value="1.5h" icon={Clock} color="text-slate-600" bgColor="bg-slate-50" />
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-6">
           {/* Main Chart */}
-          <Card className="lg:col-span-2 shadow-sm border-none overflow-hidden">
-            <CardHeader className="bg-white border-b">
+          <Card className="lg:col-span-2 shadow-sm border-slate-200">
+            <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-xl font-headline font-bold">Usage by Purpose</CardTitle>
-                  <CardDescription>Frequency of visitor reasons in current filtered period.</CardDescription>
+                  <CardTitle className="text-lg font-bold text-slate-800">Usage Analytics</CardTitle>
+                  <CardDescription>Breakdown of visit reasons.</CardDescription>
                 </div>
-                <TrendingUp className="w-6 h-6 text-accent opacity-50" />
               </div>
             </CardHeader>
-            <CardContent className="pt-8">
-              <div className="h-[350px] w-full">
+            <CardContent>
+              <div className="h-[300px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={stats.chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                    <XAxis 
-                      dataKey="name" 
-                      axisLine={false} 
-                      tickLine={false} 
-                      tick={{ fill: '#64748b', fontSize: 12 }}
-                    />
-                    <YAxis 
-                      axisLine={false} 
-                      tickLine={false} 
-                      tick={{ fill: '#64748b', fontSize: 12 }}
-                    />
+                  <BarChart data={stats.chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11 }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11 }} />
                     <Tooltip 
                       cursor={{ fill: '#f8fafc' }}
-                      contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                      contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                     />
-                    <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={40}>
+                    <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={32}>
                       {stats.chartData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
@@ -206,22 +146,20 @@ export default function AdminDashboard() {
   );
 }
 
-function StatCard({ title, value, icon: Icon, description, color }: any) {
+function StatCard({ title, value, icon: Icon, color, bgColor }: any) {
   return (
-    <Card className="border-none shadow-md hover:shadow-lg transition-shadow overflow-hidden group">
+    <Card className="border-slate-200 shadow-sm overflow-hidden">
       <CardContent className="p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{title}</p>
-            <h3 className="text-3xl font-bold mt-1 group-hover:text-primary transition-colors">{value}</h3>
-            <p className="text-xs text-muted-foreground mt-1">{description}</p>
+        <div className="flex items-center gap-4">
+          <div className={cn("p-3 rounded-xl", bgColor)}>
+            <Icon className={cn("w-5 h-5", color)} />
           </div>
-          <div className={cn("p-4 rounded-2xl text-white shadow-inner", color)}>
-            <Icon className="w-6 h-6" />
+          <div>
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{title}</p>
+            <h3 className="text-2xl font-bold text-slate-900">{value}</h3>
           </div>
         </div>
       </CardContent>
-      <div className={cn("h-1 w-full opacity-30", color)}></div>
     </Card>
   );
 }
