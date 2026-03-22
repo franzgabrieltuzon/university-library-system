@@ -6,16 +6,17 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { authStore } from '@/lib/auth-store';
 import { getBlockedUsers } from '@/lib/mock-db';
-import { Loader2, ChevronRight, Globe, Clock, Calendar, LogIn } from 'lucide-react';
+import { Loader2, ChevronRight, LogIn } from 'lucide-react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/app/lib/placeholder-images';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 export default function LandingPage() {
   const [loading, setLoading] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [mounted, setMounted] = useState(false);
+  const [currentTime, setCurrentTime] = useState<Date | null>(null);
   const { toast } = useToast();
   const router = useRouter();
 
@@ -23,6 +24,8 @@ export default function LandingPage() {
   const neuLogo = PlaceHolderImages.find(img => img.id === 'neu-logo')?.imageUrl;
 
   useEffect(() => {
+    setMounted(true);
+    setCurrentTime(new Date());
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
@@ -31,7 +34,7 @@ export default function LandingPage() {
     setLoading(true);
     // Simulate Google Login Redirect
     setTimeout(() => {
-      const mockEmail = 'jcesperanza@neu.edu.ph'; // Defaulting to your account for demonstration
+      const mockEmail = 'jcesperanza@neu.edu.ph';
       const trimmedEmail = mockEmail.toLowerCase().trim();
       
       const blocked = getBlockedUsers();
@@ -105,14 +108,20 @@ export default function LandingPage() {
         <motion.div 
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="text-right text-white"
+          className="text-right text-white min-w-[150px]"
         >
-          <div className="text-xl font-mono tracking-tighter">
-            {currentTime.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-          </div>
-          <div className="text-[10px] text-slate-400 uppercase tracking-widest mt-1">
-            {currentTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
-          </div>
+          {mounted && currentTime ? (
+            <>
+              <div className="text-xl font-mono tracking-tighter">
+                {currentTime.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+              </div>
+              <div className="text-[10px] text-slate-400 uppercase tracking-widest mt-1">
+                {currentTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+              </div>
+            </>
+          ) : (
+            <div className="h-10 w-full animate-pulse bg-white/5 rounded" />
+          )}
         </motion.div>
       </header>
 
