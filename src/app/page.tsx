@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { authStore } from '@/lib/auth-store';
+import { authStore, UserRole } from '@/lib/auth-store';
 import { getBlockedUsers } from '@/lib/mock-db';
-import { Loader2, ChevronRight, LogIn } from 'lucide-react';
+import { Loader2, ChevronRight, LogIn, ShieldCheck, GraduationCap } from 'lucide-react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/app/lib/placeholder-images';
 import { motion } from 'framer-motion';
@@ -15,13 +15,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 export default function LandingPage() {
   const [loading, setLoading] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<UserRole>('visitor');
   const [mounted, setMounted] = useState(false);
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
   const { toast } = useToast();
   const router = useRouter();
 
   const libraryImage = PlaceHolderImages.find(img => img.id === 'library-hero')?.imageUrl || 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1600&h=900&auto=format&fit=crop';
-  const neuLogo = PlaceHolderImages.find(img => img.id === 'neu-logo')?.imageUrl;
 
   useEffect(() => {
     setMounted(true);
@@ -30,11 +30,16 @@ export default function LandingPage() {
     return () => clearInterval(timer);
   }, []);
 
+  const openLogin = (role: UserRole) => {
+    setSelectedRole(role);
+    setShowLoginModal(true);
+  };
+
   const handleGoogleLogin = () => {
     setLoading(true);
     // Simulate Google Login Redirect
     setTimeout(() => {
-      const mockEmail = 'jcesperanza@neu.edu.ph';
+      const mockEmail = selectedRole === 'admin' ? 'jcesperanza@neu.edu.ph' : 'student@neu.edu.ph';
       const trimmedEmail = mockEmail.toLowerCase().trim();
       
       const blocked = getBlockedUsers();
@@ -49,13 +54,13 @@ export default function LandingPage() {
       }
 
       const mockUser = {
-        id: 'google-uid-123',
+        id: 'google-uid-' + Math.random().toString(36).substr(2, 9),
         email: trimmedEmail,
-        name: 'JC Esperanza',
-        program: 'Library Administration',
+        name: selectedRole === 'admin' ? 'JC Esperanza' : 'NEU Student',
+        program: selectedRole === 'admin' ? 'Library Administration' : 'College of Computer Studies',
         college: 'New Era University',
-        role: 'admin' as const,
-        isEmployee: true
+        role: selectedRole,
+        isEmployee: selectedRole === 'admin'
       };
 
       authStore.getState().setUser(mockUser);
@@ -67,7 +72,7 @@ export default function LandingPage() {
         description: `Signed in as ${mockUser.name}`,
       });
 
-      router.push('/admin');
+      router.push(selectedRole === 'admin' ? '/admin' : '/visitor/welcome');
     }, 1500);
   };
 
@@ -88,23 +93,7 @@ export default function LandingPage() {
       </div>
 
       {/* Top Header */}
-      <header className="relative z-10 p-8 flex justify-between items-start w-full">
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-4"
-        >
-          {neuLogo && (
-            <div className="relative w-12 h-12">
-              <Image src={neuLogo} alt="NEU Logo" fill className="object-contain filter brightness-0 invert" unoptimized />
-            </div>
-          )}
-          <div className="flex flex-col">
-            <h2 className="text-sm font-bold tracking-[0.2em] text-white uppercase">New Era University</h2>
-            <p className="text-[10px] text-slate-300 tracking-widest uppercase">Diliman, Quezon City</p>
-          </div>
-        </motion.div>
-
+      <header className="relative z-10 p-8 flex justify-end items-start w-full">
         <motion.div 
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -133,26 +122,33 @@ export default function LandingPage() {
           transition={{ duration: 0.8 }}
           className="max-w-4xl"
         >
-          <span className="text-[11px] font-bold tracking-[0.5em] text-slate-400 uppercase mb-4 block">
-            University Library System
-          </span>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif text-white leading-tight">
-            <span className="italic text-[#D4AF37] block mb-2 font-playfair">Welcome to the</span>
-            <span className="font-playfair font-bold">NEU Library</span>
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-playfair font-bold text-white leading-tight">
+            New Era Library
           </h1>
 
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="mt-12"
+            className="mt-16 flex flex-col md:flex-row gap-6 justify-center"
           >
             <Button 
-              onClick={() => setShowLoginModal(true)}
+              onClick={() => openLogin('visitor')}
               variant="outline"
-              className="px-10 py-7 text-sm font-bold tracking-[0.2em] text-[#D4AF37] border-[#D4AF37]/50 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] bg-transparent rounded-none uppercase transition-all group"
+              className="px-8 py-8 text-sm font-bold tracking-[0.2em] text-[#D4AF37] border-[#D4AF37]/40 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] bg-transparent rounded-none uppercase transition-all group min-w-[240px]"
             >
-              Enter the Library
+              <GraduationCap className="mr-3 h-5 w-5" />
+              Student Portal
+              <ChevronRight className="ml-3 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+
+            <Button 
+              onClick={() => openLogin('admin')}
+              variant="outline"
+              className="px-8 py-8 text-sm font-bold tracking-[0.2em] text-white border-white/20 hover:bg-white/10 hover:border-white bg-transparent rounded-none uppercase transition-all group min-w-[240px]"
+            >
+              <ShieldCheck className="mr-3 h-5 w-5" />
+              Admin Portal
               <ChevronRight className="ml-3 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </motion.div>
@@ -161,13 +157,12 @@ export default function LandingPage() {
 
       {/* Footer Info */}
       <footer className="absolute bottom-0 left-0 right-0 z-10 p-8 flex flex-col md:flex-row justify-between items-center gap-4 text-white/60">
-        <div className="flex items-center gap-8 text-[10px] tracking-widest uppercase font-medium">
+        <div className="flex items-center gap-8 text-[10px] tracking-widest uppercase font-medium text-center md:text-left">
           <div className="flex flex-col gap-1">
-            <span className="text-white/40 mb-1">Library Hours</span>
+            <span className="text-white/40 mb-1">Institutional Hours</span>
             <div className="flex gap-4">
               <span>Mon - Fri: <b className="text-white">7:30 AM – 7:00 PM</b></span>
               <span>Saturday: <b className="text-white">8:00 AM – 5:00 PM</b></span>
-              <span>Sunday: <b className="text-white">Closed</b></span>
             </div>
           </div>
         </div>
@@ -175,7 +170,7 @@ export default function LandingPage() {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/20 px-3 py-1 rounded-full">
             <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-[10px] font-bold text-green-400 uppercase tracking-tighter">Open Now</span>
+            <span className="text-[10px] font-bold text-green-400 uppercase tracking-tighter">System Active</span>
           </div>
         </div>
       </footer>
@@ -188,9 +183,11 @@ export default function LandingPage() {
               <div className="w-12 h-12 bg-[#D4AF37]/10 rounded-xl flex items-center justify-center mb-4 mx-auto border border-[#D4AF37]/20">
                 <LogIn className="w-6 h-6 text-[#D4AF37]" />
               </div>
-              <DialogTitle className="text-center text-2xl font-serif">Institutional Access</DialogTitle>
+              <DialogTitle className="text-center text-2xl font-serif">
+                {selectedRole === 'admin' ? 'Administrator Login' : 'Student Access'}
+              </DialogTitle>
               <DialogDescription className="text-center text-slate-400 text-sm">
-                Please authenticate using your official NEU Google account to access library services.
+                Please authenticate using your official NEU account to proceed to the {selectedRole === 'admin' ? 'dashboard' : 'check-in'}.
               </DialogDescription>
             </DialogHeader>
 
@@ -220,12 +217,12 @@ export default function LandingPage() {
                         d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                       />
                     </svg>
-                    Sign in with Google
+                    Continue with Google
                   </>
                 )}
               </Button>
               <p className="text-[10px] text-center text-slate-500 uppercase tracking-widest leading-relaxed px-4">
-                By signing in, you agree to follow the NEU Library policy and institutional guidelines.
+                Secure institutional authentication for New Era University.
               </p>
             </div>
           </div>
