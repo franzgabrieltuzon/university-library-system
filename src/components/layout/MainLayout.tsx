@@ -14,9 +14,7 @@ import {
   UserCog, 
   LogOut, 
   Power,
-  Clock,
-  Settings,
-  Library
+  Clock
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -61,10 +59,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <div className="min-h-screen flex bg-[#030712] text-slate-200 font-body overflow-hidden">
-      {/* High-Fidelity Institutional Sidebar */}
+      {/* Institutional Sidebar (Admin Only) */}
       {isAdmin && (
-        <aside className="w-[300px] bg-[#0a1128] border-r border-white/5 flex flex-col shrink-0 z-50">
-          {/* Brand Header */}
+        <aside className="w-[320px] bg-[#0a1128] border-r border-white/5 flex flex-col shrink-0 z-50">
           <div className="p-8 pb-10">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center p-1.5 overflow-hidden">
@@ -77,75 +74,52 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
 
-          {/* Navigation */}
           <nav className="flex-1 px-4 space-y-1">
             <p className="text-[9px] font-bold text-slate-600 uppercase tracking-[0.2em] px-4 mb-4">Navigation</p>
-            <SidebarNavItem 
-              href="/admin" 
-              icon={LayoutDashboard} 
-              label="Dashboard" 
-              active={pathname === '/admin'} 
-            />
-            <SidebarNavItem 
-              href="/admin/logs" 
-              icon={Users} 
-              label="Visitor Logs" 
-              active={pathname === '/admin/logs'} 
-            />
-            <SidebarNavItem 
-              href="/admin/users" 
-              icon={UserCog} 
-              label="User Management" 
-              active={pathname === '/admin/users'} 
-            />
+            <SidebarNavItem href="/admin" icon={LayoutDashboard} label="Dashboard" active={pathname === '/admin'} />
+            <SidebarNavItem href="/admin/logs" icon={Users} label="Visitor Logs" active={pathname === '/admin/logs'} />
+            <SidebarNavItem href="/admin/users" icon={UserCog} label="User Management" active={pathname === '/admin/users'} />
           </nav>
 
-          {/* Library Status (Bottom Section) */}
           <div className="p-6 space-y-6">
             <div className="space-y-4">
               <p className="text-[9px] font-bold text-slate-600 uppercase tracking-[0.2em] px-2">Library Status</p>
-              <div className="px-2 space-y-1">
-                <div className="flex items-center gap-2">
-                  <div className={cn("w-1.5 h-1.5 rounded-full", isLibraryOpen ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" : "bg-red-500")} />
-                  <span className={cn("text-[10px] font-black uppercase tracking-widest", isLibraryOpen ? "text-green-500" : "text-red-500")}>
+              <div className="px-2">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className={cn("w-2 h-2 rounded-full", isLibraryOpen ? "bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.6)] animate-pulse" : "bg-red-500")} />
+                  <span className={cn("text-xs font-black uppercase tracking-widest", isLibraryOpen ? "text-green-500" : "text-red-500")}>
                     {isLibraryOpen ? "OPEN" : "CLOSED"}
                   </span>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-[9px] text-slate-500 font-medium">Opened by</span>
-                  <span className="text-[9px] text-slate-400 font-bold">{user?.email || 'admin'}</span>
-                  <span className="text-[8px] text-slate-600 font-medium">System Ready</span>
-                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setIsLibraryOpen(!isLibraryOpen)}
+                  className="w-full h-10 text-[10px] font-bold uppercase tracking-widest bg-[#1e1e2d] border-none text-red-400 hover:bg-red-500/10 rounded-xl"
+                >
+                  <Power className="w-3.5 h-3.5 mr-2" />
+                  {isLibraryOpen ? "Close Library" : "Open Library"}
+                </Button>
               </div>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => setIsLibraryOpen(!isLibraryOpen)}
-                className="w-full h-9 text-[9px] font-bold uppercase tracking-widest bg-[#1e1e2d] border-none text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-lg transition-all"
-              >
-                <Power className="w-3.5 h-3.5 mr-2" />
-                {isLibraryOpen ? "Close Library" : "Open Library"}
-              </Button>
             </div>
 
-            {/* User Profile */}
-            <div className="bg-[#1e1e2d]/50 rounded-2xl p-4 border border-white/5 space-y-4">
+            {/* Profile & Permanent Sign Out Section in Sidebar */}
+            <div className="bg-[#1e1e2d]/50 rounded-2xl p-5 border border-white/5 space-y-4 shadow-xl">
               <div className="flex items-center gap-3">
                 <Avatar className="h-10 w-10 border border-white/10">
                   <AvatarFallback className="bg-[#D4AF37] text-slate-900 text-xs font-black">{initials}</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col min-w-0">
-                  <span className="text-[11px] font-bold text-white truncate">Administrator</span>
-                  <span className="text-[9px] text-slate-500 truncate leading-tight">{user?.email}</span>
-                  <span className="text-[8px] text-[#D4AF37] font-black uppercase tracking-widest mt-0.5">ADMIN</span>
+                  <span className="text-[11px] font-bold text-white truncate">{user?.name}</span>
+                  <span className="text-[9px] text-[#D4AF37] font-black uppercase tracking-widest mt-0.5">Administrator</span>
                 </div>
               </div>
               <Button 
-                variant="outline" 
+                variant="destructive" 
                 onClick={handleSignOut}
-                className="w-full h-9 text-[9px] font-bold uppercase tracking-widest border-red-500/20 text-red-400 bg-transparent hover:bg-red-500/10 hover:border-red-500/40 rounded-lg transition-all"
+                className="w-full h-11 text-[11px] font-black uppercase tracking-[0.2em] bg-red-600 hover:bg-red-700 text-white rounded-xl transition-all shadow-lg"
               >
-                <LogOut className="w-3.5 h-3.5 mr-2" />
+                <LogOut className="w-4 h-4 mr-2" />
                 Sign Out
               </Button>
             </div>
@@ -153,52 +127,47 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         </aside>
       )}
 
-      {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 bg-[#030712] relative overflow-hidden">
-        {/* Real-time Clock Header & Sign Out */}
-        <header className="h-20 flex items-center justify-between px-12 z-40 border-b border-white/5">
+        {/* Global Header with High-Visibility Sign Out */}
+        <header className="h-24 flex items-center justify-between px-12 z-40 border-b border-white/5 bg-[#030712]/80 backdrop-blur-xl">
           <div className="flex items-center gap-6">
-            {/* Direct Sign Out Button for all users in the header */}
-            {user && (
-              <Button 
-                variant="ghost" 
-                onClick={handleSignOut}
-                className="h-10 px-4 text-[10px] font-bold uppercase tracking-[0.2em] text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all border border-red-500/20"
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                Sign Out
-              </Button>
-            )}
-            
             {!isAdmin && (
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#D4AF37]/10 flex items-center justify-center border border-[#D4AF37]/20">
-                  <span className="text-[10px] font-bold text-[#D4AF37]">{initials}</span>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-[#D4AF37]/10 flex items-center justify-center border border-[#D4AF37]/20">
+                  <span className="text-sm font-bold text-[#D4AF37]">{initials}</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[10px] font-bold text-white uppercase tracking-wider">{user?.name}</span>
-                  <span className="text-[8px] text-slate-500 uppercase tracking-widest">Authorized Session</span>
+                  <span className="text-sm font-bold text-white uppercase tracking-wider">{user?.name}</span>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-widest font-medium">Verified Institutional Access</span>
                 </div>
               </div>
             )}
           </div>
 
-          <div className="flex flex-col items-end">
-             {mounted && currentTime ? (
-              <>
+          <div className="flex items-center gap-12">
+            {mounted && currentTime && (
+              <div className="flex flex-col items-end">
                 <div className="flex items-center gap-3">
-                  <Clock className="w-3.5 h-3.5 text-[#D4AF37] opacity-60" />
-                  <span className="text-xl font-mono font-black text-white tracking-tighter tabular-nums">
+                  <Clock className="w-4 h-4 text-[#D4AF37] animate-pulse" />
+                  <span className="text-2xl font-mono font-black text-white tracking-tighter tabular-nums">
                     {format(currentTime, 'HH:mm:ss')}
                   </span>
                 </div>
-                <span className="text-[9px] text-[#D4AF37] font-bold uppercase tracking-[0.3em] mt-1">
-                  {format(currentTime, 'EEEE, MMMM dd, yyyy')}
+                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em] mt-1">
+                  {format(currentTime, 'EEEE, MMM dd, yyyy')}
                 </span>
-              </>
-            ) : (
-              <div className="h-10 w-40 animate-pulse bg-white/5 rounded-xl" />
+              </div>
             )}
+
+            {/* HIGH-VISIBILITY SIGN OUT BUTTON - ACCESSIBLE EVERYWHERE */}
+            <Button 
+              variant="destructive" 
+              onClick={handleSignOut}
+              className="h-12 px-8 font-black uppercase tracking-[0.2em] rounded-xl shadow-[0_0_20px_rgba(220,38,38,0.2)] hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:scale-105 transition-all duration-300"
+            >
+              <LogOut className="w-5 h-5 mr-3" />
+              Sign Out
+            </Button>
           </div>
         </header>
 
@@ -217,15 +186,15 @@ function SidebarNavItem({ href, icon: Icon, label, active }: any) {
     <Link 
       href={href}
       className={cn(
-        "flex items-center gap-3 px-4 py-3.5 rounded-xl text-[11px] font-bold transition-all duration-200 group relative",
+        "flex items-center gap-3 px-4 py-4 rounded-xl text-[11px] font-bold transition-all duration-200 group relative",
         active 
           ? "bg-[#D4AF37]/10 text-[#D4AF37]" 
           : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
       )}
     >
-      {active && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-[#D4AF37] rounded-r-full" />}
+      {active && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-[#D4AF37] rounded-r-full" />}
       <Icon className={cn("w-4 h-4 transition-colors", active ? "text-[#D4AF37]" : "text-slate-500 group-hover:text-slate-300")} />
-      <span className="tracking-wide">{label}</span>
+      <span className="tracking-widest uppercase">{label}</span>
     </Link>
   );
 }
