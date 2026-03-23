@@ -45,12 +45,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     };
   }, [pathname, router]);
 
-  if (!user && pathname !== '/') return null;
+  if (pathname === '/') return <>{children}</>;
+  if (!user) return null;
 
   const isAdmin = user?.role === 'admin';
   const initials = user?.name ? user.name.split(' ').map(n => n[0]).join('') : 'NEU';
-
-  if (pathname === '/') return <>{children}</>;
 
   const handleSignOut = () => {
     authStore.getState().logout();
@@ -59,23 +58,42 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <div className="min-h-screen flex bg-[#030712] text-slate-200 font-body overflow-hidden">
+      {/* EXTREMELY PROMINENT SIGN OUT BUTTON - FIXED POSITION TOP RIGHT */}
+      <div className="fixed top-6 right-6 z-[9999] flex items-center gap-6">
+        {mounted && currentTime && (
+          <div className="flex flex-col items-end mr-4 hidden md:flex">
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-[#D4AF37] animate-pulse" />
+              <span className="text-xl font-mono font-black text-white tracking-tighter tabular-nums">
+                {format(currentTime, 'HH:mm:ss')}
+              </span>
+            </div>
+            <span className="text-[9px] text-slate-500 font-bold uppercase tracking-[0.2em]">
+              {format(currentTime, 'EEEE, MMM dd, yyyy')}
+            </span>
+          </div>
+        )}
+        <Button 
+          variant="destructive" 
+          onClick={handleSignOut}
+          className="h-14 px-10 font-black uppercase tracking-[0.2em] rounded-2xl bg-red-600 hover:bg-red-700 text-white shadow-[0_0_30px_rgba(220,38,38,0.5)] border-2 border-white/20 hover:scale-105 transition-all duration-300 flex items-center gap-3 active:scale-95"
+        >
+          <LogOut className="w-6 h-6" />
+          Sign Out
+        </Button>
+      </div>
+
       {/* Institutional Sidebar (Admin Only) */}
       {isAdmin && (
-        <aside className="w-[320px] bg-[#0a1128] border-r border-white/5 flex flex-col shrink-0 z-50">
+        <aside className="w-[300px] bg-[#0a1128] border-r border-white/5 flex flex-col shrink-0 z-50">
           <div className="p-8 pb-10">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center p-1.5 overflow-hidden">
-                <img src="https://neu.edu.ph/main/assets/images/neu_logo_new.png" alt="NEU Logo" className="w-full h-full object-contain" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[11px] font-black text-white uppercase tracking-[0.1em] leading-tight">New Era University</span>
-                <span className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 font-bold">Library Management</span>
-              </div>
+            <div className="flex flex-col">
+              <span className="text-[11px] font-black text-white uppercase tracking-[0.15em] leading-tight">New Era University</span>
+              <span className="text-[9px] text-[#D4AF37] uppercase tracking-[0.2em] mt-1 font-black">Management Portal</span>
             </div>
           </div>
 
           <nav className="flex-1 px-4 space-y-1">
-            <p className="text-[9px] font-bold text-slate-600 uppercase tracking-[0.2em] px-4 mb-4">Navigation</p>
             <SidebarNavItem href="/admin" icon={LayoutDashboard} label="Dashboard" active={pathname === '/admin'} />
             <SidebarNavItem href="/admin/logs" icon={Users} label="Visitor Logs" active={pathname === '/admin/logs'} />
             <SidebarNavItem href="/admin/users" icon={UserCog} label="User Management" active={pathname === '/admin/users'} />
@@ -98,80 +116,43 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                   className="w-full h-10 text-[10px] font-bold uppercase tracking-widest bg-[#1e1e2d] border-none text-red-400 hover:bg-red-500/10 rounded-xl"
                 >
                   <Power className="w-3.5 h-3.5 mr-2" />
-                  {isLibraryOpen ? "Close Library" : "Open Library"}
+                  {isLibraryOpen ? "Emergency Close" : "Open Library"}
                 </Button>
               </div>
             </div>
 
-            {/* Profile & Permanent Sign Out Section in Sidebar */}
-            <div className="bg-[#1e1e2d]/50 rounded-2xl p-5 border border-white/5 space-y-4 shadow-xl">
+            <div className="bg-[#1e1e2d]/50 rounded-2xl p-5 border border-white/5 space-y-4">
               <div className="flex items-center gap-3">
                 <Avatar className="h-10 w-10 border border-white/10">
                   <AvatarFallback className="bg-[#D4AF37] text-slate-900 text-xs font-black">{initials}</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col min-w-0">
                   <span className="text-[11px] font-bold text-white truncate">{user?.name}</span>
-                  <span className="text-[9px] text-[#D4AF37] font-black uppercase tracking-widest mt-0.5">Administrator</span>
+                  <span className="text-[9px] text-slate-500 font-black uppercase tracking-widest">Admin</span>
                 </div>
               </div>
-              <Button 
-                variant="destructive" 
-                onClick={handleSignOut}
-                className="w-full h-11 text-[11px] font-black uppercase tracking-[0.2em] bg-red-600 hover:bg-red-700 text-white rounded-xl transition-all shadow-lg"
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                Sign Out
-              </Button>
             </div>
           </div>
         </aside>
       )}
 
       <div className="flex-1 flex flex-col min-w-0 bg-[#030712] relative overflow-hidden">
-        {/* Global Header with High-Visibility Sign Out */}
-        <header className="h-24 flex items-center justify-between px-12 z-40 border-b border-white/5 bg-[#030712]/80 backdrop-blur-xl">
-          <div className="flex items-center gap-6">
-            {!isAdmin && (
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#D4AF37]/10 flex items-center justify-center border border-[#D4AF37]/20">
-                  <span className="text-sm font-bold text-[#D4AF37]">{initials}</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm font-bold text-white uppercase tracking-wider">{user?.name}</span>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-widest font-medium">Verified Institutional Access</span>
-                </div>
+        {/* Header - Minimalist, just showing profile if not admin */}
+        {!isAdmin && (
+          <header className="h-24 flex items-center px-12 z-40">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-[#D4AF37]/10 flex items-center justify-center border border-[#D4AF37]/20">
+                <span className="text-sm font-bold text-[#D4AF37]">{initials}</span>
               </div>
-            )}
-          </div>
-
-          <div className="flex items-center gap-12">
-            {mounted && currentTime && (
-              <div className="flex flex-col items-end">
-                <div className="flex items-center gap-3">
-                  <Clock className="w-4 h-4 text-[#D4AF37] animate-pulse" />
-                  <span className="text-2xl font-mono font-black text-white tracking-tighter tabular-nums">
-                    {format(currentTime, 'HH:mm:ss')}
-                  </span>
-                </div>
-                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em] mt-1">
-                  {format(currentTime, 'EEEE, MMM dd, yyyy')}
-                </span>
+              <div className="flex flex-col">
+                <span className="text-sm font-bold text-white uppercase tracking-wider">{user?.name}</span>
+                <span className="text-[10px] text-slate-500 uppercase tracking-widest font-medium">Verified Access</span>
               </div>
-            )}
+            </div>
+          </header>
+        )}
 
-            {/* HIGH-VISIBILITY SIGN OUT BUTTON - ACCESSIBLE EVERYWHERE */}
-            <Button 
-              variant="destructive" 
-              onClick={handleSignOut}
-              className="h-12 px-8 font-black uppercase tracking-[0.2em] rounded-xl shadow-[0_0_20px_rgba(220,38,38,0.2)] hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:scale-105 transition-all duration-300"
-            >
-              <LogOut className="w-5 h-5 mr-3" />
-              Sign Out
-            </Button>
-          </div>
-        </header>
-
-        <main className="flex-1 p-12 pt-8 overflow-y-auto custom-scrollbar relative z-10">
+        <main className={cn("flex-1 overflow-y-auto custom-scrollbar relative z-10", isAdmin ? "p-12" : "p-8")}>
           <div className="max-w-[1600px] mx-auto">
             {children}
           </div>
