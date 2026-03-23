@@ -1,29 +1,30 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 222 47% 11%; /* Dark Navy background like the image */
+    --background: 222 47% 4%;
     --foreground: 210 40% 98%;
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 221 64% 43%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222 47% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --card: 222 47% 7%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 7%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 45 61% 53%; /* NEU Gold */
+    --primary-foreground: 222 47% 4%;
+    --secondary: 222 47% 15%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 222 47% 15%;
+    --muted-foreground: 215.4 16.3% 56.9%;
     --accent: 45 61% 53%;
-    --accent-foreground: 222 47% 11.2%;
+    --accent-foreground: 222 47% 4%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221 64% 43%;
-    --radius: 0.5rem;
+    --border: 222 47% 12%;
+    --input: 222 47% 12%;
+    --ring: 45 61% 53%;
+    --radius: 1rem;
   }
 }
 
@@ -32,9 +33,10 @@
     @apply border-border;
   }
   body {
-    @apply bg-[#0a1128] text-foreground antialiased; /* Deep dark blue for the whole site */
-    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
-    background-size: 40px 40px;
+    @apply bg-[#030712] text-foreground antialiased selection:bg-[#D4AF37]/30 selection:text-white;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.03) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(30, 41, 59, 0.4) 0px, transparent 50%);
   }
 }
 
@@ -42,6 +44,23 @@
   font-family: 'Playfair Display', serif;
 }
 
-.clean-card {
-  @apply bg-card border border-border shadow-sm rounded-xl overflow-hidden;
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.2);
+}
+
+.glass-panel {
+  @apply bg-white/[0.02] border border-white/5 backdrop-blur-md;
 }
