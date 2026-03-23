@@ -2,12 +2,11 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import MainLayout from '@/components/layout/MainLayout';
 import { authStore, User } from '@/lib/auth-store';
-import { getLogs, VisitorLog, COLLEGES } from '@/lib/mock-db';
+import { getLogs, VisitorLog } from '@/lib/mock-db';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Users, UserPlus, Clock, TrendingUp, Filter, ShieldCheck, Activity } from 'lucide-react';
+import { Users, Clock, ShieldCheck, Activity } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import AIInsights from '@/components/admin/AIInsights';
 import { cn } from '@/lib/utils';
@@ -62,7 +61,6 @@ export default function AdminDashboard() {
     return { total, students, staff, chartData };
   }, [filteredLogs]);
 
-  // Premium Blue & Gold palette
   const COLORS = ['#D4AF37', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe'];
 
   if (!user) return null;
@@ -89,7 +87,6 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard title="Active Visitors" value={stats.total} icon={Activity} color="text-green-400" bgColor="bg-green-400/10" />
         <StatCard title="Total Students" value={stats.students} icon={Users} color="text-blue-400" bgColor="bg-blue-400/10" />
@@ -98,7 +95,6 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
-        {/* Main Chart */}
         <Card className="lg:col-span-2 bg-[#0a1128] border-white/5 shadow-2xl rounded-2xl">
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -117,7 +113,7 @@ export default function AdminDashboard() {
                   <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10, fontWeight: 'bold' }} />
                   <Tooltip 
                     cursor={{ fill: '#ffffff05' }}
-                    contentStyle={{ backgroundColor: '#0a1128', borderRadius: '12px', border: '1px solid #ffffff10', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.5)' }}
+                    contentStyle={{ backgroundColor: '#0a1128', borderRadius: '12px', border: '1px solid #ffffff10' }}
                     itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 'bold' }}
                   />
                   <Bar dataKey="value" radius={[6, 6, 0, 0]} barSize={40}>
@@ -131,7 +127,6 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        {/* AI Insights Card */}
         <div className="lg:col-span-1">
           <AIInsights reasons={filteredLogs.map(l => l.reason)} />
         </div>

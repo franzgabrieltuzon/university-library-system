@@ -2,17 +2,16 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import MainLayout from '@/components/layout/MainLayout';
 import { authStore, User } from '@/lib/auth-store';
 import { getLogs, VisitorLog, COLLEGES, REASONS } from '@/lib/mock-db';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, FileDown, Printer, Mail, GraduationCap, Clock, Filter, ListFilter } from 'lucide-react';
+import { Search, FileDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { format, differenceInMinutes } from 'date-fns';
+import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
 export default function VisitorLogsPage() {
@@ -64,7 +63,6 @@ export default function VisitorLogsPage() {
   }, [logs, searchTerm, filterReason, filterCollege, timeTab]);
 
   const handleExport = () => {
-    // CSV Export simulation
     const headers = ['Name', 'Email', 'College', 'Program', 'Purpose', 'Date', 'Time In'];
     const rows = filteredLogs.map(l => [
       l.name, l.email, l.college, l.program, l.reason, 
@@ -95,7 +93,7 @@ export default function VisitorLogsPage() {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-[#0a1128] border border-white/5 rounded-2xl p-6 space-y-4">
+      <div className="bg-[#0a1128] border border-white/5 rounded-2xl p-6 space-y-4 shadow-2xl">
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
           <Input 
@@ -164,7 +162,7 @@ export default function VisitorLogsPage() {
       </div>
 
       {/* Logs Table */}
-      <Card className="bg-[#0a1128] border-white/5 rounded-2xl overflow-hidden">
+      <Card className="bg-[#0a1128] border-white/5 rounded-2xl overflow-hidden shadow-2xl">
         <CardContent className="p-0">
           <Table>
             <TableHeader className="bg-white/5">

@@ -13,7 +13,6 @@ import {
   UserCog, 
   LogOut, 
   Library, 
-  Circle,
   Power,
   ChevronRight
 } from 'lucide-react';
