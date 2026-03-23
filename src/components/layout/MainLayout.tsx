@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { LogOut, LayoutDashboard, History, Users, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -27,84 +28,51 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   if (!user && pathname !== '/') return null;
 
+  const initials = user?.name ? user.name.split(' ').map(n => n[0]).join('') : 'NEU';
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#F5F7FA]">
-      <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md shadow-sm">
+    <div className="min-h-screen flex flex-col">
+      <header className="w-full bg-[#0a1128]/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href={user?.role === 'admin' ? '/admin' : '/visitor/welcome'} className="flex items-center gap-3 group">
-            <div className="flex flex-col">
-              <span className="font-headline font-bold text-primary leading-none group-hover:text-blue-600 transition-colors">NEW ERA UNIVERSITY LIBRARY</span>
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Institutional Portal</span>
+          <Link href={user?.role === 'admin' ? '/admin' : '/visitor/welcome'} className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center p-1">
+               <img src="https://neu.edu.ph/main/assets/images/neu_logo_new.png" alt="NEU" className="w-full h-full object-contain" />
             </div>
+            <span className="font-bold text-sm text-white tracking-tight uppercase">Library Visitor Log</span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-1">
-            {user?.role === 'admin' && (
-              <>
-                <NavLink href="/admin" active={pathname === '/admin'} icon={LayoutDashboard}>Dashboard</NavLink>
-                <NavLink href="/admin/logs" active={pathname === '/admin/logs'} icon={History}>Visitor Logs</NavLink>
-                <NavLink href="/admin/users" active={pathname === '/admin/users'} icon={Users}>Access Control</NavLink>
-              </>
-            )}
-            {user?.role === 'visitor' && (
-              <NavLink href="/visitor/check-in" active={pathname === '/visitor/check-in'} icon={Settings}>Check-in</NavLink>
-            )}
-          </nav>
-
           <div className="flex items-center gap-4">
-            <div className="hidden sm:flex flex-col items-end leading-none border-r pr-4 mr-2">
-              <span className="text-sm font-bold text-slate-900">{user?.name}</span>
-              <span className="text-[10px] text-primary font-bold uppercase tracking-widest">{user?.role}</span>
+            <div className="flex items-center gap-3">
+              <Avatar className="h-8 w-8 bg-yellow-600 text-white border-none">
+                <AvatarFallback className="bg-yellow-600 text-[10px] font-bold">{initials}</AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col leading-none">
+                <span className="text-[10px] font-bold text-white uppercase">{user?.name}</span>
+                <span className="text-[8px] text-yellow-500 font-bold uppercase tracking-tighter mt-0.5">NEU-202X-12914</span>
+              </div>
             </div>
             <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-9 w-9 rounded-full hover:bg-red-50 hover:text-red-600 transition-colors" 
+              variant="outline" 
+              size="sm" 
+              className="h-7 text-[10px] font-bold uppercase border-red-500/50 text-red-400 bg-transparent hover:bg-red-500 hover:text-white transition-all rounded"
               onClick={() => {
                 authStore.getState().logout();
                 router.push('/');
               }}
             >
-              <LogOut className="w-4 h-4" />
+              Sign Out
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 container mx-auto px-6 py-8">
+      <main className="flex-1 container mx-auto px-6 py-12">
         {children}
       </main>
 
-      <footer className="border-t bg-white py-8">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-center md:text-left">
-            <p className="text-sm font-bold text-slate-900">New Era University Library</p>
-            <p className="text-[11px] text-slate-400 uppercase tracking-widest">&copy; {new Date().getFullYear()} Institutional Data Management</p>
-          </div>
-          <div className="flex gap-6 text-[11px] font-bold uppercase tracking-widest text-slate-400">
-            <span className="hover:text-primary transition-colors cursor-pointer">Security</span>
-            <span className="hover:text-primary transition-colors cursor-pointer">Privacy</span>
-            <span className="hover:text-primary transition-colors cursor-pointer">Contact</span>
-          </div>
-        </div>
+      <footer className="py-8 text-center border-t border-white/5 bg-[#0a1128]/50">
+        <p className="text-[10px] text-slate-500 uppercase font-bold tracking-[0.2em]">&copy; {new Date().getFullYear()} NEW ERA UNIVERSITY LIBRARY</p>
       </footer>
     </div>
-  );
-}
-
-function NavLink({ href, children, active, icon: Icon }: { href: string, children: React.ReactNode, active?: boolean, icon: any }) {
-  return (
-    <Link 
-      href={href}
-      className={cn(
-        "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
-        active 
-          ? "bg-primary/10 text-primary" 
-          : "text-slate-500 hover:text-primary hover:bg-slate-50"
-      )}
-    >
-      <Icon className="w-4 h-4" />
-      {children}
-    </Link>
   );
 }
