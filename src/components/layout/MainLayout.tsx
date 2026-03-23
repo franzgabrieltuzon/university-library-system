@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { authStore, User } from '@/lib/auth-store';
 import { Button } from '@/components/ui/button';
-import { LogOut, LayoutDashboard, History, Users, Settings } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -35,9 +35,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <header className="w-full bg-[#0a1128]/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           <Link href={user?.role === 'admin' ? '/admin' : '/visitor/welcome'} className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center p-1">
-               <img src="https://neu.edu.ph/main/assets/images/neu_logo_new.png" alt="NEU" className="w-full h-full object-contain" />
-            </div>
             <span className="font-bold text-sm text-white tracking-tight uppercase">Library Visitor Log</span>
           </Link>
 

@@ -19,9 +19,7 @@ import {
   PenTool, 
   Pin,
   ArrowRight,
-  Library,
-  Sparkles,
-  CheckCircle2
+  Library
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -80,16 +78,12 @@ export default function CheckInPage() {
         
         setIsLogged(true);
         
-        toast({
-          title: 'Success',
-          description: 'Your visit is successfully logged! Have a great day!',
-        });
-
-        // Wait 3 seconds then logout and redirect back to landing
-        setTimeout(() => {
-          authStore.getState().logout();
-          router.push('/');
-        }, 3000);
+        // Store success status to show on landing page
+        localStorage.setItem('visit_logged_success', 'true');
+        
+        // Logout and redirect to landing page
+        authStore.getState().logout();
+        router.push('/');
       }
       setLoading(false);
     }, 800);
@@ -105,7 +99,7 @@ export default function CheckInPage() {
           <div className="space-y-1">
             <span className="text-[10px] font-bold text-yellow-500 uppercase tracking-widest">WELCOME TO</span>
             <h1 className="text-3xl font-headline font-bold text-white">NEU Library!</h1>
-            <p className="text-slate-400 text-sm">Welcome back, NEU! What brings you in today?</p>
+            <p className="text-slate-400 text-sm">What brings you in today?</p>
           </div>
           <div className="hidden sm:block">
              <Library className="w-16 h-16 text-yellow-500/20" strokeWidth={1.5} />
@@ -119,67 +113,45 @@ export default function CheckInPage() {
               <h2 className="text-2xl font-headline font-bold text-slate-900">Log Your Visit</h2>
             </div>
 
-            <AnimatePresence>
-              {isLogged && (
-                <motion.div 
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-green-50 border border-green-200 text-green-700 p-6 rounded-xl flex flex-col items-center text-center gap-3"
-                >
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                    <CheckCircle2 className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div className="space-y-1">
-                    <p className="font-bold text-lg">Your visit is successfully logged!</p>
-                    <p className="text-green-600/80">Have a great day! Redirecting you back...</p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <div className="space-y-4">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">PURPOSE OF VISIT</span>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {VISIT_PURPOSES.map((purpose) => (
+                  <button
+                    key={purpose.id}
+                    onClick={() => setReason(purpose.id)}
+                    disabled={loading || isLogged}
+                    className={cn(
+                      "flex flex-col items-center justify-center gap-3 p-6 rounded-xl border transition-all h-32 group",
+                      reason === purpose.id 
+                        ? "border-blue-600 bg-blue-50 ring-2 ring-blue-600/20" 
+                        : "border-slate-100 hover:border-slate-200 hover:bg-slate-50"
+                    )}
+                  >
+                    <purpose.icon className={cn(
+                      "w-6 h-6 transition-colors",
+                      reason === purpose.id ? "text-blue-600" : "text-slate-400 group-hover:text-slate-600"
+                    )} />
+                    <span className={cn(
+                      "text-[9px] font-bold tracking-tighter text-center",
+                      reason === purpose.id ? "text-blue-600" : "text-slate-500"
+                    )}>
+                      {purpose.label}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
 
-            {!isLogged && (
-              <>
-                <div className="space-y-4">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">PURPOSE OF VISIT</span>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {VISIT_PURPOSES.map((purpose) => (
-                      <button
-                        key={purpose.id}
-                        onClick={() => setReason(purpose.id)}
-                        disabled={isLogged}
-                        className={cn(
-                          "flex flex-col items-center justify-center gap-3 p-6 rounded-xl border transition-all h-32 group",
-                          reason === purpose.id 
-                            ? "border-blue-600 bg-blue-50 ring-2 ring-blue-600/20" 
-                            : "border-slate-100 hover:border-slate-200 hover:bg-slate-50"
-                        )}
-                      >
-                        <purpose.icon className={cn(
-                          "w-6 h-6 transition-colors",
-                          reason === purpose.id ? "text-blue-600" : "text-slate-400 group-hover:text-slate-600"
-                        )} />
-                        <span className={cn(
-                          "text-[9px] font-bold tracking-tighter text-center",
-                          reason === purpose.id ? "text-blue-600" : "text-slate-500"
-                        )}>
-                          {purpose.label}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <Button 
-                  onClick={handleSubmit}
-                  disabled={loading || isLogged}
-                  className="w-full h-14 bg-[#0a1128] hover:bg-[#111c3a] text-white font-bold rounded-xl text-lg flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
-                >
-                  {loading ? "PROCESSING..." : "Log My Visit"}
-                  {!loading && <ArrowRight className="w-5 h-5" />}
-                </Button>
-              </>
-            )}
+            <Button 
+              onClick={handleSubmit}
+              disabled={loading || isLogged}
+              className="w-full h-14 bg-[#0a1128] hover:bg-[#111c3a] text-white font-bold rounded-xl text-lg flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+            >
+              {loading ? "PROCESSING..." : "Log My Visit"}
+              {!loading && <ArrowRight className="w-5 h-5" />}
+            </Button>
           </CardContent>
         </Card>
       </div>

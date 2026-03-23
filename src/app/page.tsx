@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -28,8 +27,20 @@ export default function LandingPage() {
     setMounted(true);
     setCurrentTime(new Date());
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+
+    // Check if user was redirected after a successful visit log
+    const wasLogged = localStorage.getItem('visit_logged_success');
+    if (wasLogged === 'true') {
+      toast({
+        title: "Log Complete",
+        description: "Your visit is successfully logged! Have a great day!",
+        className: "bg-green-600 border-none text-white font-bold",
+      });
+      localStorage.removeItem('visit_logged_success');
+    }
+
     return () => clearInterval(timer);
-  }, []);
+  }, [toast]);
 
   const openLogin = (role: UserRole) => {
     setSelectedRole(role);
