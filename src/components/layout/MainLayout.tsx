@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -60,7 +61,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <div className="min-h-screen flex bg-[#030712] text-slate-200 font-body overflow-hidden">
-      {/* High-Fidelity Institutional Sidebar (Reference Image Style) */}
+      {/* High-Fidelity Institutional Sidebar */}
       {isAdmin && (
         <aside className="w-[300px] bg-[#0a1128] border-r border-white/5 flex flex-col shrink-0 z-50">
           {/* Brand Header */}
@@ -154,19 +155,31 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 bg-[#030712] relative overflow-hidden">
-        {/* Real-time Clock Header & Global Actions */}
-        <header className="h-20 flex items-center justify-between px-12 z-40">
-          <div className="flex items-center gap-4">
-            {/* Show Sign Out button in header for Students/Visitors who have no sidebar */}
-            {!isAdmin && user && (
+        {/* Real-time Clock Header & Sign Out */}
+        <header className="h-20 flex items-center justify-between px-12 z-40 border-b border-white/5">
+          <div className="flex items-center gap-6">
+            {/* Direct Sign Out Button for all users in the header */}
+            {user && (
               <Button 
-                variant="outline" 
+                variant="ghost" 
                 onClick={handleSignOut}
-                className="h-9 px-4 text-[10px] font-bold uppercase tracking-widest border-white/10 text-slate-400 bg-transparent hover:bg-white/5 hover:text-white rounded-xl transition-all"
+                className="h-10 px-4 text-[10px] font-bold uppercase tracking-[0.2em] text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all border border-red-500/20"
               >
-                <LogOut className="w-3.5 h-3.5 mr-2" />
+                <LogOut className="w-4 h-4 mr-2" />
                 Sign Out
               </Button>
+            )}
+            
+            {!isAdmin && (
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#D4AF37]/10 flex items-center justify-center border border-[#D4AF37]/20">
+                  <span className="text-[10px] font-bold text-[#D4AF37]">{initials}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-bold text-white uppercase tracking-wider">{user?.name}</span>
+                  <span className="text-[8px] text-slate-500 uppercase tracking-widest">Authorized Session</span>
+                </div>
+              </div>
             )}
           </div>
 
@@ -189,7 +202,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
 
-        <main className="flex-1 p-12 pt-4 overflow-y-auto custom-scrollbar relative z-10">
+        <main className="flex-1 p-12 pt-8 overflow-y-auto custom-scrollbar relative z-10">
           <div className="max-w-[1600px] mx-auto">
             {children}
           </div>
