@@ -58,7 +58,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <div className="min-h-screen flex bg-[#030712] text-slate-200 font-body overflow-hidden">
-      {/* EXTREMELY PROMINENT SIGN OUT BUTTON - FIXED POSITION TOP RIGHT */}
+      {/* GLOBAL SIGN OUT BUTTON - FIXED TOP RIGHT */}
       <div className="fixed top-6 right-6 z-[9999] flex items-center gap-6">
         {mounted && currentTime && (
           <div className="flex flex-col items-end mr-4 hidden md:flex">
@@ -99,7 +99,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             <SidebarNavItem href="/admin/users" icon={UserCog} label="User Management" active={pathname === '/admin/users'} />
           </nav>
 
-          <div className="p-6 space-y-6">
+          <div className="p-6 space-y-4">
             <div className="space-y-4">
               <p className="text-[9px] font-bold text-slate-600 uppercase tracking-[0.2em] px-2">Library Status</p>
               <div className="px-2">
@@ -121,7 +121,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               </div>
             </div>
 
-            <div className="bg-[#1e1e2d]/50 rounded-2xl p-5 border border-white/5 space-y-4">
+            <div className="bg-[#1e1e2d]/50 rounded-2xl p-4 border border-white/5 space-y-4">
               <div className="flex items-center gap-3">
                 <Avatar className="h-10 w-10 border border-white/10">
                   <AvatarFallback className="bg-[#D4AF37] text-slate-900 text-xs font-black">{initials}</AvatarFallback>
@@ -131,6 +131,16 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                   <span className="text-[9px] text-slate-500 font-black uppercase tracking-widest">Admin</span>
                 </div>
               </div>
+              
+              {/* PRIMARY SIDEBAR SIGN OUT */}
+              <Button 
+                variant="destructive" 
+                onClick={handleSignOut}
+                className="w-full h-11 font-black uppercase tracking-[0.2em] rounded-xl bg-red-600 hover:bg-red-700 text-white border-none transition-all flex items-center justify-center gap-2 text-[10px]"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout Portal
+              </Button>
             </div>
           </div>
         </aside>

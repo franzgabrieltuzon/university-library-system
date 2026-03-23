@@ -90,16 +90,16 @@ export default function VisitorLogsPage() {
   return (
     <div className="space-y-8 animate-in fade-in duration-700">
       <div className="space-y-1">
-        <span className="text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.4em]">ADMINISTRATIVE RECORDS</span>
+        <span className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em]">RECORDS</span>
         <h1 className="text-5xl font-headline font-bold text-white tracking-tighter">Visitor Logs</h1>
       </div>
 
       <div className="bg-[#0f172a]/40 backdrop-blur-md border border-white/5 rounded-3xl p-8 space-y-6 shadow-2xl">
         <div className="relative group">
-          <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 transition-colors group-focus-within:text-[#D4AF37]" />
+          <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 transition-colors group-focus-within:text-blue-400" />
           <Input 
             placeholder="Search by name, email, student number, or college..." 
-            className="w-full h-14 bg-[#1e293b]/50 border-none pl-14 text-slate-200 rounded-2xl focus-visible:ring-2 focus-visible:ring-[#D4AF37]/20 placeholder:text-slate-500 text-base"
+            className="w-full h-14 bg-[#1e293b]/50 border-none pl-14 text-slate-200 rounded-2xl focus-visible:ring-2 focus-visible:ring-blue-500/40 placeholder:text-slate-500 text-base"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -114,7 +114,7 @@ export default function VisitorLogsPage() {
                 className={cn(
                   "px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] rounded-xl transition-all duration-300",
                   timeTab === tab 
-                    ? "bg-[#D4AF37] text-[#030712] shadow-[0_0_20px_rgba(212,175,55,0.3)]" 
+                    ? "bg-blue-600 text-white shadow-[0_0_20px_rgba(59,130,246,0.3)]" 
                     : "text-slate-500 hover:text-white hover:bg-white/5"
                 )}
               >
@@ -148,7 +148,7 @@ export default function VisitorLogsPage() {
 
             <Button 
               onClick={handleExport}
-              className="h-12 px-6 bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/20 font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl transition-all"
+              className="h-12 px-6 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl transition-all"
             >
               <FileDown className="w-4 h-4 mr-3" />
               Export CSV
