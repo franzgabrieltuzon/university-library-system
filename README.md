@@ -1,3 +1,4 @@
+
 # New Era University Library Management System
 
 A professional, sleek, and high-performance Library Visitor Log and Analytics System designed specifically for **New Era University**. This application provides a modern digital alternative to traditional logbooks, featuring role-based access, RFID validation simulation, and AI-powered usage insights.

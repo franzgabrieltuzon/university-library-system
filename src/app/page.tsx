@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -92,7 +93,7 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60" />
       </div>
 
-      {/* Top Header */}
+      {/* Top Header - Just Clock */}
       <header className="relative z-10 p-8 flex justify-end items-start w-full">
         <motion.div 
           initial={{ opacity: 0, x: 20 }}
