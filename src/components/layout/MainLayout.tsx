@@ -45,16 +45,34 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     };
   }, [pathname, router]);
 
-  if (pathname === '/') return <>{children}</>;
-  if (!user) return null;
-
-  const isAdmin = user?.role === 'admin';
-  const initials = user?.name ? user.name.split(' ').map(n => n[0]).join('') : 'NEU';
-
   const handleSignOut = () => {
     authStore.getState().logout();
     router.push('/');
   };
+
+  if (pathname === '/') {
+    return (
+      <div className="bg-[#030712] text-slate-200 font-body min-h-screen relative">
+        {user && (
+           <div className="fixed top-6 right-6 z-[9999]">
+            <Button 
+              variant="ghost" 
+              onClick={handleSignOut}
+              className="h-12 px-5 text-slate-400 hover:bg-white/5 hover:text-white text-xs font-bold uppercase tracking-widest rounded-xl transition-all"
+            >
+              Sign Out
+            </Button>
+          </div>
+        )}
+        {children}
+      </div>
+    );
+  }
+
+  if (!user) return null;
+
+  const isAdmin = user?.role === 'admin';
+  const initials = user?.name ? user.name.split(' ').map(n => n[0]).join('') : 'NEU';
 
   return (
     <div className="min-h-screen flex bg-[#030712] text-slate-200 font-body overflow-hidden">
@@ -73,14 +91,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </span>
           </div>
         )}
-        <Button 
-          variant="destructive" 
-          onClick={handleSignOut}
-          className="h-14 px-10 font-black uppercase tracking-[0.2em] rounded-2xl bg-red-600 hover:bg-red-700 text-white shadow-[0_0_30px_rgba(220,38,38,0.5)] border-2 border-white/20 hover:scale-105 transition-all duration-300 flex items-center gap-3 active:scale-95"
-        >
-          <LogOut className="w-6 h-6" />
-          Sign Out
-        </Button>
       </div>
 
       {/* Institutional Sidebar (Admin Only) */}
@@ -132,14 +142,13 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 </div>
               </div>
               
-              {/* PRIMARY SIDEBAR SIGN OUT */}
               <Button 
-                variant="destructive" 
+                variant="ghost" 
                 onClick={handleSignOut}
-                className="w-full h-11 font-black uppercase tracking-[0.2em] rounded-xl bg-red-600 hover:bg-red-700 text-white border-none transition-all flex items-center justify-center gap-2 text-[10px]"
+                className="w-full h-11 text-slate-400 hover:bg-white/5 hover:text-white text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2"
               >
                 <LogOut className="w-4 h-4" />
-                Logout Portal
+                Sign Out
               </Button>
             </div>
           </div>
@@ -147,9 +156,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       )}
 
       <div className="flex-1 flex flex-col min-w-0 bg-[#030712] relative overflow-hidden">
-        {/* Header - Minimalist, just showing profile if not admin */}
         {!isAdmin && (
-          <header className="h-24 flex items-center px-12 z-40">
+          <header className="h-24 flex items-center justify-between px-12 z-40">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-2xl bg-[#D4AF37]/10 flex items-center justify-center border border-[#D4AF37]/20">
                 <span className="text-sm font-bold text-[#D4AF37]">{initials}</span>
@@ -159,6 +167,13 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 <span className="text-[10px] text-slate-500 uppercase tracking-widest font-medium">Verified Access</span>
               </div>
             </div>
+             <Button 
+              variant="ghost" 
+              onClick={handleSignOut}
+              className="h-12 px-5 text-slate-400 hover:bg-white/5 hover:text-white text-xs font-bold uppercase tracking-widest rounded-xl transition-all"
+            >
+              Sign Out
+            </Button>
           </header>
         )}
 
