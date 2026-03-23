@@ -13,9 +13,6 @@ import {
   UserCog, 
   LogOut, 
   Power,
-  ChevronRight,
-  ShieldCheck,
-  Circle,
   Clock,
   Settings,
   Library
@@ -55,6 +52,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const initials = user?.name ? user.name.split(' ').map(n => n[0]).join('') : 'NEU';
 
   if (pathname === '/') return <>{children}</>;
+
+  const handleSignOut = () => {
+    authStore.getState().logout();
+    router.push('/');
+  };
 
   return (
     <div className="min-h-screen flex bg-[#030712] text-slate-200 font-body overflow-hidden">
@@ -110,8 +112,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[9px] text-slate-500 font-medium">Opened by</span>
-                  <span className="text-[9px] text-slate-400 font-bold">{user?.email || 'ezekielkayl.peralta'}</span>
-                  <span className="text-[8px] text-slate-600 font-medium">Mar 19 - 10:01 AM</span>
+                  <span className="text-[9px] text-slate-400 font-bold">{user?.email || 'admin'}</span>
+                  <span className="text-[8px] text-slate-600 font-medium">System Ready</span>
                 </div>
               </div>
               <Button 
@@ -139,10 +141,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               </div>
               <Button 
                 variant="outline" 
-                onClick={() => {
-                  authStore.getState().logout();
-                  router.push('/');
-                }}
+                onClick={handleSignOut}
                 className="w-full h-9 text-[9px] font-bold uppercase tracking-widest border-red-500/20 text-red-400 bg-transparent hover:bg-red-500/10 hover:border-red-500/40 rounded-lg transition-all"
               >
                 <LogOut className="w-3.5 h-3.5 mr-2" />
@@ -155,23 +154,39 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 bg-[#030712] relative overflow-hidden">
-        {/* Real-time Clock Header (Now integrated into Main Content) */}
-        <header className="h-20 flex items-center justify-end px-12 z-40">
-           {mounted && currentTime ? (
-            <div className="flex flex-col items-end">
-              <div className="flex items-center gap-3">
-                <Clock className="w-3.5 h-3.5 text-[#D4AF37] opacity-60" />
-                <span className="text-xl font-mono font-black text-white tracking-tighter tabular-nums">
-                  {format(currentTime, 'HH:mm:ss')}
+        {/* Real-time Clock Header & Global Actions */}
+        <header className="h-20 flex items-center justify-between px-12 z-40">
+          <div className="flex items-center gap-4">
+            {/* Show Sign Out button in header for Students/Visitors who have no sidebar */}
+            {!isAdmin && user && (
+              <Button 
+                variant="outline" 
+                onClick={handleSignOut}
+                className="h-9 px-4 text-[10px] font-bold uppercase tracking-widest border-white/10 text-slate-400 bg-transparent hover:bg-white/5 hover:text-white rounded-xl transition-all"
+              >
+                <LogOut className="w-3.5 h-3.5 mr-2" />
+                Sign Out
+              </Button>
+            )}
+          </div>
+
+          <div className="flex flex-col items-end">
+             {mounted && currentTime ? (
+              <>
+                <div className="flex items-center gap-3">
+                  <Clock className="w-3.5 h-3.5 text-[#D4AF37] opacity-60" />
+                  <span className="text-xl font-mono font-black text-white tracking-tighter tabular-nums">
+                    {format(currentTime, 'HH:mm:ss')}
+                  </span>
+                </div>
+                <span className="text-[9px] text-[#D4AF37] font-bold uppercase tracking-[0.3em] mt-1">
+                  {format(currentTime, 'EEEE, MMMM dd, yyyy')}
                 </span>
-              </div>
-              <span className="text-[9px] text-[#D4AF37] font-bold uppercase tracking-[0.3em] mt-1">
-                {format(currentTime, 'EEEE, MMMM dd, yyyy')}
-              </span>
-            </div>
-          ) : (
-            <div className="h-10 w-40 animate-pulse bg-white/5 rounded-xl" />
-          )}
+              </>
+            ) : (
+              <div className="h-10 w-40 animate-pulse bg-white/5 rounded-xl" />
+            )}
+          </div>
         </header>
 
         <main className="flex-1 p-12 pt-4 overflow-y-auto custom-scrollbar relative z-10">
